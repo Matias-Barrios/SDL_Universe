@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"time"
 
+	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
+	"github.com/Matias-Barrios/SDL_Universe/pieces"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 
@@ -20,12 +21,13 @@ func main() {
 	defer sdl.Quit()
 	defer window.Destroy()
 	defer renderer.Destroy()
-	fmt.Println("Hola!!!")
+	fmt.Println(definitions.Screen.BlockSize)
 	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
 	block := SDL.GetTexture(window, renderer, "assets/block.png")
 
 	// MAIN LOOP ....
 	// **************************************
+	var p = pieces.Pieces["linea"]
 	running := true
 	for running {
 		// Poll for SDL events
@@ -36,12 +38,21 @@ func main() {
 				break
 			}
 		}
-		// Draw stuff
+		// Background
 		SDL.DrawStuff(renderer, t, 0, 0, definitions.Screen.Width, definitions.Screen.Height)
-		SDL.DrawStuff(renderer, block, 0, 0, 50, 50)
 
+		// Happenings
+		// ***********************
+		p.Fall()
+		// Draw stuff
+		// ***********************
+
+		board.Draw(renderer, block)
+		p.Draw(renderer, block)
+		// Present stuff
+		// ***********************
 		renderer.Present()
-		time.Sleep(time.Millisecond * 10)
+		sdl.Delay(200)
 	}
 
 	// END MAIN LOOP ....
