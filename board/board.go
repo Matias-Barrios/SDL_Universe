@@ -9,11 +9,11 @@ import (
 var Board = struct {
 	X     int32
 	Y     int32
-	Cells [][]int32
+	Cells [][]byte
 }{
 	X: (definitions.Screen.Width / 2) - (definitions.Screen.BlockSize * 5),
 	Y: 0 - (20 * definitions.Screen.Height / 100),
-	Cells: [][]int32{
+	Cells: [][]byte{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},

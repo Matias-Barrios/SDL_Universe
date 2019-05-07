@@ -1,6 +1,8 @@
 package pieces
 
 import (
+	"fmt"
+
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -8,10 +10,10 @@ import (
 )
 
 type Piece struct {
-	PosX  int32
-	PosY  int32
-	Spin  int32
-	Shape map[int32][8][8]int32
+	PosX  int
+	PosY  int
+	Spin  byte
+	Shape map[byte][8][8]byte
 }
 
 var Pieces = map[string]Piece{
@@ -19,7 +21,7 @@ var Pieces = map[string]Piece{
 		PosX: 0,
 		PosY: 0,
 		Spin: 0,
-		Shape: map[int32][8][8]int32{
+		Shape: map[byte][8][8]byte{
 			0: {
 				{0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0},
@@ -68,7 +70,7 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if val != 0 {
-				SDL.DrawStuff(r, t, (int32(sub_ix)*definitions.Screen.BlockSize)+p.PosX+board.Board.X, (int32(ix)*definitions.Screen.BlockSize)+p.PosY+board.Board.Y, definitions.Screen.BlockSize, definitions.Screen.BlockSize)
+				SDL.DrawStuff(r, t, (int32(sub_ix)*definitions.Screen.BlockSize)+(int32(p.PosX)*definitions.Screen.BlockSize)+board.Board.X, (int32(ix)*definitions.Screen.BlockSize)+(int32(p.PosY)*definitions.Screen.BlockSize)+board.Board.Y, definitions.Screen.BlockSize, definitions.Screen.BlockSize)
 			}
 		}
 	}
@@ -76,5 +78,27 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 }
 
 func (p *Piece) Fall() {
-	p.PosY += 1 * definitions.Screen.BlockSize
+	var potential_piece = *p
+	potential_piece.PosY += 1
+	if Fits(potential_piece) {
+		p.PosY += 1
+	} else {
+		*p = Pieces["linea"]
+		p.Spin = 1
+	}
+
+}
+
+func Fits(p Piece) bool {
+	for ix, row := range p.Shape[p.Spin] {
+		for sub_ix, val := range row {
+			if ix+p.PosY < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+p.PosY > -1 && sub_ix+p.PosX > -1 {
+				fmt.Println("entro ", ix+p.PosY)
+				if val != 0 && board.Board.Cells[ix+p.PosY][sub_ix+p.PosX] != 0 {
+					return false
+				}
+			}
+		}
+	}
+	return true
 }
