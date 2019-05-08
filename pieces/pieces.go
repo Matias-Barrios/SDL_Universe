@@ -1,8 +1,6 @@
 package pieces
 
 import (
-	"fmt"
-
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -93,7 +91,6 @@ func Fits(p Piece) bool {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if ix+p.PosY < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+p.PosY > -1 && sub_ix+p.PosX > -1 {
-				fmt.Println("entro ", ix+p.PosY)
 				if val != 0 && board.Board.Cells[ix+p.PosY][sub_ix+p.PosX] != 0 {
 					return false
 				}
@@ -101,4 +98,16 @@ func Fits(p Piece) bool {
 		}
 	}
 	return true
+}
+
+func Fuse(p *Piece) {
+	for ix, row := range p.Shape[p.Spin] {
+		for sub_ix, val := range row {
+			if ix+p.PosY < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+p.PosY > -1 && sub_ix+p.PosX > -1 {
+				if val != 0 {
+					board.Board.Cells[ix+p.PosY][sub_ix+p.PosX] = val
+				}
+			}
+		}
+	}
 }
