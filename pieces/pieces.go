@@ -1,6 +1,8 @@
 package pieces
 
 import (
+	"fmt"
+
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -13,6 +15,8 @@ type Piece struct {
 	Spin  byte
 	Shape map[byte][8][8]byte
 }
+
+var AllPosiblePieces []string
 
 var Pieces = map[string]Piece{
 	"linea": {
@@ -81,6 +85,7 @@ func (p *Piece) Fall() {
 	if Fits(potential_piece) {
 		p.PosY += 1
 	} else {
+		Fuse(p)
 		*p = Pieces["linea"]
 		p.Spin = 1
 	}
@@ -101,6 +106,7 @@ func Fits(p Piece) bool {
 }
 
 func Fuse(p *Piece) {
+	fmt.Println("Fusing!")
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if ix+p.PosY < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+p.PosY > -1 && sub_ix+p.PosX > -1 {
@@ -110,4 +116,12 @@ func Fuse(p *Piece) {
 			}
 		}
 	}
+}
+
+func init() {
+
+}
+
+func RandomPiece() {
+
 }
