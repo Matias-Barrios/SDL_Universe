@@ -27,15 +27,30 @@ func main() {
 
 	// MAIN LOOP ....
 	// **************************************
-	var p = pieces.Pieces["linea"]
+	var thePiece = pieces.Pieces[pieces.RandomPiece()]
+	//var thePiece = pieces.Pieces["L"]
 	running := true
 	for running {
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			switch event.(type) {
+			switch t := event.(type) {
 			case *sdl.QuitEvent:
 				running = false
 				break
+			case *sdl.KeyboardEvent:
+				if t.Type != sdl.KEYDOWN {
+					break
+				}
+				switch key := t.Keysym.Sym; key {
+				case sdl.K_LEFT:
+					thePiece.Move(-1)
+				case sdl.K_RIGHT:
+					thePiece.Move(1)
+				case sdl.K_a:
+					thePiece.SpinIt(-1)
+				case sdl.K_s:
+					thePiece.SpinIt(1)
+				}
 			}
 		}
 		// Background
@@ -43,12 +58,12 @@ func main() {
 
 		// Happenings
 		// ***********************
-		p.Fall()
+		thePiece.Fall()
 		// Draw stuff
 		// ***********************
 
 		board.Draw(renderer, block)
-		p.Draw(renderer, block)
+		thePiece.Draw(renderer, block)
 		// Present stuff
 		// ***********************
 		renderer.Present()
