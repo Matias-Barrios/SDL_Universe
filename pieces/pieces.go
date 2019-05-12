@@ -172,7 +172,7 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 				SDL.DrawStuff(r,
 					t,
 					int32((sub_ix*definitions.Screen.BlockSize)+((p.PosX)*definitions.Screen.BlockSize)+board.Board.X),
-					int32((ix*definitions.Screen.BlockSize)+(p.PosY/definitions.Screen.BlockSize)+board.Board.Y),
+					int32((ix*definitions.Screen.BlockSize)+(p.PosY)+board.Board.Y),
 					int32(definitions.Screen.BlockSize),
 					int32(definitions.Screen.BlockSize))
 			}

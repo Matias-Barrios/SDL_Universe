@@ -31,8 +31,8 @@ func main() {
 	var thePiece = pieces.Pieces["line"]
 	running := true
 	go func() {
-		for {
-			sdl.Delay(50)
+		for running {
+			sdl.Delay(40)
 			thePiece.Fall()
 		}
 	}()
