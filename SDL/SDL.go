@@ -14,7 +14,7 @@ func InitSDL() (*sdl.Window, *sdl.Renderer, error) {
 		return &sdl.Window{}, &sdl.Renderer{}, err
 	}
 	window, err := sdl.CreateWindow("Universe", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		definitions.Screen.Width, definitions.Screen.Height, sdl.WINDOW_SHOWN)
+		int32(definitions.Screen.Width), int32(definitions.Screen.Height), sdl.WINDOW_SHOWN)
 	if err != nil {
 		return &sdl.Window{}, &sdl.Renderer{}, err
 	}

@@ -14,6 +14,7 @@ type Piece struct {
 	PosX  int
 	PosY  int
 	Spin  int
+	VelY  int
 	Shape map[int][8][8]byte
 }
 
@@ -168,7 +169,12 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if val != 0 {
-				SDL.DrawStuff(r, t, (int32(sub_ix)*definitions.Screen.BlockSize)+(int32(p.PosX)*definitions.Screen.BlockSize)+board.Board.X, (int32(ix)*definitions.Screen.BlockSize)+(int32(p.PosY)*definitions.Screen.BlockSize)+board.Board.Y, definitions.Screen.BlockSize, definitions.Screen.BlockSize)
+				SDL.DrawStuff(r,
+					t,
+					int32((sub_ix*definitions.Screen.BlockSize)+((p.PosX)*definitions.Screen.BlockSize)+board.Board.X),
+					int32((ix*definitions.Screen.BlockSize)+(p.PosY/definitions.Screen.BlockSize)+board.Board.Y),
+					int32(definitions.Screen.BlockSize),
+					int32(definitions.Screen.BlockSize))
 			}
 		}
 	}
@@ -177,7 +183,7 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 
 func (p *Piece) Fall() {
 	if Fits(p, 0, 1, p.Spin) {
-		p.PosY += 1
+		p.PosY += definitions.Game.Gravity
 	} else {
 		Fuse(p)
 		*p = Pieces[RandomPiece()]
@@ -189,8 +195,8 @@ func (p *Piece) Fall() {
 func Fits(p *Piece, velx int, vely int, spin int) bool {
 	for ix, row := range p.Shape[spin] {
 		for sub_ix, val := range row {
-			if ix+(p.PosY+vely) < len(board.Board.Cells) && sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) && ix+(p.PosY+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
-				if val != 0 && board.Board.Cells[ix+(p.PosY+vely)][sub_ix+(p.PosX+velx)] != 0 {
+			if ix+((p.PosY/definitions.Screen.BlockSize)+vely) < len(board.Board.Cells) && sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) && ix+((p.PosY/definitions.Screen.BlockSize)+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
+				if val != 0 && board.Board.Cells[ix+((p.PosY/definitions.Screen.BlockSize)+vely)][sub_ix+(p.PosX+velx)] != 0 {
 					return false
 				}
 			}
@@ -202,9 +208,9 @@ func Fits(p *Piece, velx int, vely int, spin int) bool {
 func Fuse(p *Piece) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
-			if ix+p.PosY < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+p.PosY > -1 && sub_ix+p.PosX > -1 {
+			if ix+(p.PosY/definitions.Screen.BlockSize) < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+(p.PosY/definitions.Screen.BlockSize) > -1 && sub_ix+p.PosX > -1 {
 				if val != 0 {
-					board.Board.Cells[ix+p.PosY][sub_ix+p.PosX] = val
+					board.Board.Cells[ix+(p.PosY/definitions.Screen.BlockSize)][sub_ix+p.PosX] = val
 				}
 			}
 		}

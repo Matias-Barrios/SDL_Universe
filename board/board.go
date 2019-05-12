@@ -7,8 +7,8 @@ import (
 )
 
 type board struct {
-	X     int32
-	Y     int32
+	X     int
+	Y     int
 	Cells [][]byte
 }
 
@@ -40,7 +40,7 @@ var Board = &board{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -59,7 +59,12 @@ func Draw(r *sdl.Renderer, t *sdl.Texture) {
 	for ix, row := range Board.Cells {
 		for sub_ix, val := range row {
 			if val != 0 && ix > 7 {
-				SDL.DrawStuff(r, t, (int32(sub_ix)*definitions.Screen.BlockSize)+Board.X, (int32(ix)*definitions.Screen.BlockSize)+Board.Y, definitions.Screen.BlockSize, definitions.Screen.BlockSize)
+				SDL.DrawStuff(r,
+					t,
+					int32((sub_ix*definitions.Screen.BlockSize)+Board.X),
+					int32((ix*definitions.Screen.BlockSize)+Board.Y),
+					int32(definitions.Screen.BlockSize),
+					int32(definitions.Screen.BlockSize))
 			}
 		}
 	}
@@ -71,7 +76,7 @@ func (b *board) ClearLines() {
 		if checkIfFilled(Board.Cells[i][1:clearable_columns]) {
 			for j := i; j > 0; j-- {
 				for k := 1; k < clearable_columns; k++ {
-					Board.Cells[i][k] = Board.Cells[i-1][k]
+					Board.Cells[j][k] = Board.Cells[j-1][k]
 				}
 			}
 			Board.Cells[0] = []byte{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}

@@ -28,8 +28,14 @@ func main() {
 	// MAIN LOOP ....
 	// **************************************
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
-	var thePiece = pieces.Pieces["square"]
+	var thePiece = pieces.Pieces["line"]
 	running := true
+	go func() {
+		for {
+			sdl.Delay(50)
+			thePiece.Fall()
+		}
+	}()
 	for running {
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
@@ -54,11 +60,11 @@ func main() {
 			}
 		}
 		// Background
-		SDL.DrawStuff(renderer, t, 0, 0, definitions.Screen.Width, definitions.Screen.Height)
+		SDL.DrawStuff(renderer, t, 0, 0, int32(definitions.Screen.Width), int32(definitions.Screen.Height))
 
 		// Happenings
 		// ***********************
-		thePiece.Fall()
+
 		// Draw stuff
 		// ***********************
 
@@ -67,7 +73,7 @@ func main() {
 		// Present stuff
 		// ***********************
 		renderer.Present()
-		sdl.Delay(200)
+
 	}
 
 	// END MAIN LOOP ....

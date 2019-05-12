@@ -10,13 +10,21 @@ const (
 )
 
 type screen struct {
-	Width     int32
-	Height    int32
-	BlockSize int32
+	Width     int
+	Height    int
+	BlockSize int
 }
 
 var Screen = screen{
 	Width:     screenWidth,
 	Height:    screenHeight,
-	BlockSize: int32(math.Round(3 * screenWidth / 100)),
+	BlockSize: int(math.Round(3 * screenWidth / 100)),
+}
+
+type game struct {
+	Gravity int
+}
+
+var Game = &game{
+	Gravity: 10,
 }
