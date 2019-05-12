@@ -209,6 +209,7 @@ func Fuse(p *Piece) {
 			}
 		}
 	}
+	board.Board.ClearLines()
 }
 
 func init() {

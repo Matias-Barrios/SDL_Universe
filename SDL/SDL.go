@@ -38,20 +38,16 @@ func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
 		log.Fatalf("Failed to load PNG: %s\n", err)
 		os.Exit(4)
 	}
-
-	// Take the surfaceImg and use it to create a hardware accelerated textureImg. Or in other words take the image
-	// sitting in ram and put it onto the graphics card.
 	textureImg, err := r.CreateTextureFromSurface(surfaceImg)
 	if err != nil {
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
-	// We have the image now as a texture so we no longer have need for surface. Time to let it go
 	surfaceImg.Free()
 	return textureImg
 }
 
-// Draw shit
+// DrawStuff : Draw shit
 func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int32, posy int32, width int32, height int32) {
 	r.Copy(t, nil, &sdl.Rect{posx, posy, width, width})
 }

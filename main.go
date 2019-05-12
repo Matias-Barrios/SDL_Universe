@@ -27,8 +27,8 @@ func main() {
 
 	// MAIN LOOP ....
 	// **************************************
-	var thePiece = pieces.Pieces[pieces.RandomPiece()]
-	//var thePiece = pieces.Pieces["L"]
+	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
+	var thePiece = pieces.Pieces["square"]
 	running := true
 	for running {
 		// Poll for SDL events
