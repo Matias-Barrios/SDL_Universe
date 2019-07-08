@@ -1,6 +1,7 @@
 package SDL
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -50,4 +51,41 @@ func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
 // DrawStuff : Draw shit
 func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int32, posy int32, width int32, height int32) {
 	r.Copy(t, nil, &sdl.Rect{posx, posy, width, width})
+}
+
+var Block_Textures map[string]*sdl.Texture
+var Messages_Textures map[string]*sdl.Texture
+
+func BricksLoadTextures(w *sdl.Window, r *sdl.Renderer) {
+	Block_Textures = make(map[string]*sdl.Texture)
+	Block_Textures["greyblock"] = GetTexture(w, r, "assets/greyblock.png")
+	Block_Textures["greenblock"] = GetTexture(w, r, "assets/greenblock.png")
+	Block_Textures["orangeblock"] = GetTexture(w, r, "assets/orangeblock.png")
+	Block_Textures["purpleblock"] = GetTexture(w, r, "assets/purpleblock.png")
+	Block_Textures["redblock"] = GetTexture(w, r, "assets/redblock.png")
+	Block_Textures["yellowblock"] = GetTexture(w, r, "assets/yellowblock.png")
+}
+func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
+	Messages_Textures = make(map[string]*sdl.Texture)
+	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
+}
+
+func Translate(number byte) string {
+	switch number {
+	case 1:
+		return "greyblock"
+	case 2:
+		return "greenblock"
+	case 3:
+		return "orangeblock"
+	case 4:
+		return "purpleblock"
+	case 5:
+		return "redblock"
+	case 6:
+		return "yellowblock"
+	default:
+		log.Fatalf("%s\n", fmt.Errorf("Unknown identifier for texture"))
+	}
+	return ""
 }

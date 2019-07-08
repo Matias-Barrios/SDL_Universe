@@ -23,8 +23,8 @@ func main() {
 	defer renderer.Destroy()
 	fmt.Println(definitions.Screen.BlockSize)
 	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
-	block := SDL.GetTexture(window, renderer, "assets/block.png")
-	definitions.BricksLoadTextures(r,w)
+	SDL.LoadTextures(window, renderer)
+	SDL.BricksLoadTextures(window, renderer)
 
 	// MAIN LOOP ....
 	// **************************************
@@ -37,12 +37,12 @@ func main() {
 			thePiece.Fall()
 		}
 	}()
-	for running {
+	for definitions.Game.Running {
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
 			case *sdl.QuitEvent:
-				running = false
+				definitions.Game.Running = false
 				break
 			case *sdl.KeyboardEvent:
 				if t.Type != sdl.KEYDOWN {
@@ -71,12 +71,13 @@ func main() {
 
 		board.Draw(renderer)
 		thePiece.Draw(renderer)
+		board.GameOver(renderer)
 		// Present stuff
 		// ***********************
 		renderer.Present()
 
 	}
-
+	sdl.Delay(2000)
 	// END MAIN LOOP ....
 	// **************************************
 }
