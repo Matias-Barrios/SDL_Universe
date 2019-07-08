@@ -24,6 +24,7 @@ func main() {
 	fmt.Println(definitions.Screen.BlockSize)
 	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
 	block := SDL.GetTexture(window, renderer, "assets/block.png")
+	definitions.BricksLoadTextures(r,w)
 
 	// MAIN LOOP ....
 	// **************************************
@@ -68,8 +69,8 @@ func main() {
 		// Draw stuff
 		// ***********************
 
-		board.Draw(renderer, block)
-		thePiece.Draw(renderer, block)
+		board.Draw(renderer)
+		thePiece.Draw(renderer)
 		// Present stuff
 		// ***********************
 		renderer.Present()

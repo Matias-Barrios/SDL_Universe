@@ -55,12 +55,12 @@ var tall = len(Board.Cells) - 2
 //  as the first and last are actually the left and right borders
 var clearable_columns = 11
 
-func Draw(r *sdl.Renderer, t *sdl.Texture) {
+func Draw(r *sdl.Renderer) {
 	for ix, row := range Board.Cells {
 		for sub_ix, val := range row {
 			if val != 0 && ix > 7 {
 				SDL.DrawStuff(r,
-					t,
+					definitions.Block_Textures[definitions.Translate(val)],
 					int32((sub_ix*definitions.Screen.BlockSize)+Board.X),
 					int32((ix*definitions.Screen.BlockSize)+Board.Y),
 					int32(definitions.Screen.BlockSize),

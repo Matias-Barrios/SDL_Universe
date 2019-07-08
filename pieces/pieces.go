@@ -170,7 +170,7 @@ func (p *Piece) Draw(r *sdl.Renderer, t *sdl.Texture) {
 		for sub_ix, val := range row {
 			if val != 0 {
 				SDL.DrawStuff(r,
-					t,
+					definitions.Block_Textures[definitions.Translate(val)],
 					int32((sub_ix*definitions.Screen.BlockSize)+((p.PosX)*definitions.Screen.BlockSize)+board.Board.X),
 					int32((ix*definitions.Screen.BlockSize)+(p.PosY)+board.Board.Y),
 					int32(definitions.Screen.BlockSize),
