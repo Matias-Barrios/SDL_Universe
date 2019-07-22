@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -37,12 +38,12 @@ func main() {
 			thePiece.Fall()
 		}
 	}()
-	for definitions.Game.Running {
+	for {
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
 			case *sdl.QuitEvent:
-				definitions.Game.Running = false
+				os.Exit(0)
 				break
 			case *sdl.KeyboardEvent:
 				if t.Type != sdl.KEYDOWN {
@@ -60,21 +61,24 @@ func main() {
 				}
 			}
 		}
-		// Background
-		SDL.DrawStuff(renderer, t, 0, 0, int32(definitions.Screen.Width), int32(definitions.Screen.Height))
+		if definitions.Game.Running {
 
-		// Happenings
-		// ***********************
+			// Background
+			SDL.DrawStuff(renderer, t, 0, 0, int32(definitions.Screen.Width), int32(definitions.Screen.Height))
 
-		// Draw stuff
-		// ***********************
+			// Happenings
+			// ***********************
 
-		board.Draw(renderer)
-		thePiece.Draw(renderer)
-		board.GameOver(renderer)
-		// Present stuff
-		// ***********************
-		renderer.Present()
+			// Draw stuff
+			// ***********************
+
+			board.Draw(renderer)
+			thePiece.Draw(renderer)
+			board.GameOver(renderer)
+			// Present stuff
+			// ***********************
+			renderer.Present()
+		}
 
 	}
 	sdl.Delay(2000)

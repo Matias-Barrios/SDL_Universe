@@ -14,6 +14,16 @@ func InitSDL() (*sdl.Window, *sdl.Renderer, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return &sdl.Window{}, &sdl.Renderer{}, err
 	}
+
+	mode, err := sdl.GetDesktopDisplayMode(0)
+	if err != nil {
+		return nil, nil, err
+	}
+	//definitions.Screen.Width = int(float64(mode.W) / 2.3)
+	//definitions.Screen.Height = int(float64(mode.H) / 1.3)
+	definitions.Screen.Width = int(1024.0 / 2.3)
+	definitions.Screen.Height = int(800.0 / 1.3)
+
 	window, err := sdl.CreateWindow("Universe", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
 		int32(definitions.Screen.Width), int32(definitions.Screen.Height), sdl.WINDOW_SHOWN)
 	if err != nil {

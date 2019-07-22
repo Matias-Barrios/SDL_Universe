@@ -1,8 +1,6 @@
 package board
 
 import (
-	"fmt"
-
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
 	"github.com/veandco/go-sdl2/sdl"
@@ -15,8 +13,8 @@ type board struct {
 }
 
 var Board = &board{
-	X: (definitions.Screen.Width / 2) - (definitions.Screen.BlockSize * 5),
-	Y: 0 - (20 * definitions.Screen.Height / 100),
+	X: int(float64(definitions.Screen.Width)*0.2) - (definitions.Screen.BlockSize * 5),
+	Y: 0 - int(float64(definitions.Screen.Height)*0.3),
 	Cells: [][]byte{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -78,18 +76,21 @@ func GameOver(r *sdl.Renderer) {
 		for sub_ix, val := range row {
 			if ix > 7 {
 				return
-			} else if sub_ix == 0 || sub_ix == 19 {
+			} else if sub_ix < 1 || sub_ix > 10 {
 				continue
 			} else if val != 0 {
-				fmt.Printf("ix : %d sub_ix : %d Value : %d\n", ix, sub_ix, Board.Cells[ix][sub_ix])
+				x := int32(float64(definitions.Screen.Width) * .30)
+				y := int32(float64(definitions.Screen.Height) * .30)
+				width := int32(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*.30) - x
+				height := int32(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*.30) - y
 				SDL.DrawStuff(r,
 					SDL.Messages_Textures["gameover"],
-					int32(float64(definitions.Screen.Width)*.10),
-					int32(definitions.Screen.Height-int(float64(definitions.Screen.Height)*.10)),
-					int32(definitions.Screen.Width-int(float64(definitions.Screen.Width)*.10)),
-					int32(definitions.Screen.Height-int(float64(definitions.Screen.Height)*.10)))
+					x,
+					y,
+					width,
+					height)
+				definitions.Game.Running = false
 			}
-			definitions.Game.Running = false
 		}
 	}
 

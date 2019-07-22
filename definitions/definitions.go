@@ -7,8 +7,8 @@ import (
 // Screen deinitions
 
 const (
-	screenWidth  = 800
-	screenHeight = 600
+	screenWidth  = 1200
+	screenHeight = 900
 )
 
 type screen struct {
