@@ -13,8 +13,8 @@ type board struct {
 }
 
 var Board = &board{
-	X: int(float64(definitions.Screen.Width)*0.2) - (definitions.Screen.BlockSize * 5),
-	Y: 0 - int(float64(definitions.Screen.Height)*0.3),
+	X: definitions.PointsToRatioH(50),
+	Y: definitions.PointsToRatioV(50),
 	Cells: [][]byte{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -79,10 +79,10 @@ func GameOver(r *sdl.Renderer) {
 			} else if sub_ix < 1 || sub_ix > 10 {
 				continue
 			} else if val != 0 {
-				x := int32(float64(definitions.Screen.Width) * .30)
-				y := int32(float64(definitions.Screen.Height) * .30)
-				width := int32(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*.30) - x
-				height := int32(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*.30) - y
+				x := int32(definitions.PointsToRatioH(250))
+				y := int32(definitions.PointsToRatioV(250))
+				width := int32(definitions.PointsToRatioH(500))
+				height := int32(definitions.PointsToRatioV(500))
 				SDL.DrawStuff(r,
 					SDL.Messages_Textures["gameover"],
 					x,
