@@ -5,16 +5,17 @@ import "fmt"
 // Screen deinitions
 
 const (
-	screenWidth  = 800
-	screenHeight = 600
-	ratioH       = float64(screenWidth / 1000)
-	ratioV       = float64(screenHeight / 1000)
+	screenWidth  = 1200
+	screenHeight = 900
+	ratioH       = float64(screenWidth) / 1000.0
+	ratioV       = float64(screenHeight) / 1000.0
 )
 
 type screen struct {
-	Width     int
-	Height    int
-	BlockSize int
+	Width      int
+	Height     int
+	BlockSizeW int
+	BlockSizeH int
 }
 
 var Screen screen
@@ -30,7 +31,6 @@ var Game = &game{
 }
 
 func PointsToRatioH(h int) int {
-	fmt.Println("h: ", h, "ratioH : ", ratioH)
 	return int(float64(h) * ratioH)
 }
 
@@ -40,11 +40,10 @@ func PointsToRatioV(v int) int {
 
 func init() {
 	Screen = screen{
-		Width:     screenWidth,
-		Height:    screenHeight,
-		BlockSize: PointsToRatioH(25),
+		Width:      screenWidth,
+		Height:     screenHeight,
+		BlockSizeW: PointsToRatioH(25),
+		BlockSizeH: PointsToRatioV(25),
 	}
-	fmt.Println("X : ", PointsToRatioH(50))
-	fmt.Println("Y : ", PointsToRatioV(50))
-	fmt.Println("Block Size : ", Screen.BlockSize)
+	fmt.Println(PointsToRatioH(50))
 }

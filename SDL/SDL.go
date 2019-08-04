@@ -59,8 +59,8 @@ func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
 }
 
 // DrawStuff : Draw shit
-func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int32, posy int32, width int32, height int32) {
-	r.Copy(t, nil, &sdl.Rect{posx, posy, width, width})
+func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int, posy int, width int, height int) {
+	r.Copy(t, nil, &sdl.Rect{int32(posx), int32(posy), int32(width), int32(width)})
 }
 
 var Block_Textures map[string]*sdl.Texture
@@ -78,6 +78,7 @@ func BricksLoadTextures(w *sdl.Window, r *sdl.Renderer) {
 func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
 	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
+	Messages_Textures["greyblock"] = GetTexture(w, r, "assets/greyblock.png")
 }
 
 func Translate(number byte) string {

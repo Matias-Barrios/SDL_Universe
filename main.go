@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,7 +21,6 @@ func main() {
 	defer sdl.Quit()
 	defer window.Destroy()
 	defer renderer.Destroy()
-	fmt.Println(definitions.Screen.BlockSize)
 	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
 	SDL.LoadTextures(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
@@ -64,7 +62,7 @@ func main() {
 		if definitions.Game.Running {
 
 			// Background
-			SDL.DrawStuff(renderer, t, 0, 0, int32(definitions.Screen.Width), int32(definitions.Screen.Height))
+			SDL.DrawStuff(renderer, t, 0, 0, int(definitions.Screen.Width), int(definitions.Screen.Height))
 
 			// Happenings
 			// ***********************

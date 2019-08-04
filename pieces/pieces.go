@@ -218,10 +218,10 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 			if val != 0 {
 				SDL.DrawStuff(r,
 					SDL.Block_Textures[SDL.Translate(val)],
-					int32((sub_ix*definitions.Screen.BlockSize)+((p.PosX)*definitions.Screen.BlockSize)+board.Board.X),
-					int32((ix*definitions.Screen.BlockSize)+(p.PosY)+board.Board.Y),
-					int32(definitions.Screen.BlockSize),
-					int32(definitions.Screen.BlockSize))
+					int((sub_ix*definitions.Screen.BlockSizeW)+((p.PosX)*definitions.Screen.BlockSizeW)+board.Board.X),
+					int((ix*definitions.Screen.BlockSizeH)+(p.PosY)+board.Board.Y),
+					int(definitions.Screen.BlockSizeW),
+					int(definitions.Screen.BlockSizeH))
 			}
 		}
 	}
@@ -242,8 +242,8 @@ func (p *Piece) Fall() {
 func Fits(p *Piece, velx int, vely int, spin int) bool {
 	for ix, row := range p.Shape[spin] {
 		for sub_ix, val := range row {
-			if ix+((p.PosY/definitions.Screen.BlockSize)+vely) < len(board.Board.Cells) && sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) && ix+((p.PosY/definitions.Screen.BlockSize)+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
-				if val != 0 && board.Board.Cells[ix+((p.PosY/definitions.Screen.BlockSize)+vely)][sub_ix+(p.PosX+velx)] != 0 {
+			if ix+((p.PosY/definitions.Screen.BlockSizeH)+vely) < len(board.Board.Cells) && sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) && ix+((p.PosY/definitions.Screen.BlockSizeH)+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
+				if val != 0 && board.Board.Cells[ix+((p.PosY/definitions.Screen.BlockSizeH)+vely)][sub_ix+(p.PosX+velx)] != 0 {
 					return false
 				}
 			}
@@ -255,9 +255,9 @@ func Fits(p *Piece, velx int, vely int, spin int) bool {
 func Fuse(p *Piece) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
-			if ix+(p.PosY/definitions.Screen.BlockSize) < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+(p.PosY/definitions.Screen.BlockSize) > -1 && sub_ix+p.PosX > -1 {
+			if ix+(p.PosY/definitions.Screen.BlockSizeH) < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+(p.PosY/definitions.Screen.BlockSizeH) > -1 && sub_ix+p.PosX > -1 {
 				if val != 0 {
-					board.Board.Cells[ix+(p.PosY/definitions.Screen.BlockSize)][sub_ix+p.PosX] = val
+					board.Board.Cells[ix+(p.PosY/definitions.Screen.BlockSizeH)][sub_ix+p.PosX] = val
 				}
 			}
 		}

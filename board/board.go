@@ -1,6 +1,8 @@
 package board
 
 import (
+	"fmt"
+
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
 	"github.com/veandco/go-sdl2/sdl"
@@ -13,8 +15,8 @@ type board struct {
 }
 
 var Board = &board{
-	X: definitions.PointsToRatioH(50),
-	Y: definitions.PointsToRatioV(50),
+	X: definitions.PointsToRatioH(20),
+	Y: definitions.PointsToRatioV(20),
 	Cells: [][]byte{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -61,10 +63,10 @@ func Draw(r *sdl.Renderer) {
 			if val != 0 && ix > 7 {
 				SDL.DrawStuff(r,
 					SDL.Block_Textures[SDL.Translate(val)],
-					int32((sub_ix*definitions.Screen.BlockSize)+Board.X),
-					int32((ix*definitions.Screen.BlockSize)+Board.Y),
-					int32(definitions.Screen.BlockSize),
-					int32(definitions.Screen.BlockSize))
+					(sub_ix*definitions.Screen.BlockSizeW)+Board.X,
+					(ix*definitions.Screen.BlockSizeH)+Board.Y,
+					(definitions.Screen.BlockSizeW),
+					(definitions.Screen.BlockSizeH))
 			}
 		}
 	}
@@ -79,16 +81,22 @@ func GameOver(r *sdl.Renderer) {
 			} else if sub_ix < 1 || sub_ix > 10 {
 				continue
 			} else if val != 0 {
-				x := int32(definitions.PointsToRatioH(250))
-				y := int32(definitions.PointsToRatioV(250))
-				width := int32(definitions.PointsToRatioH(500))
-				height := int32(definitions.PointsToRatioV(500))
+				x := definitions.PointsToRatioH(int(float64(definitions.Screen.Width) * 0.10))
+				y := definitions.PointsToRatioV(int(float64(definitions.Screen.Height) * 0.10))
+				width := definitions.PointsToRatioH(int(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*0.20)) - x
+				height := definitions.PointsToRatioV(int(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*0.20)) - y
+				fmt.Println([]int{
+					int(x),
+					int(y),
+					int(width),
+					int(height),
+				})
 				SDL.DrawStuff(r,
-					SDL.Messages_Textures["gameover"],
-					x,
-					y,
-					width,
-					height)
+					SDL.Messages_Textures["greyblock"],
+					definitions.PointsToRatioH(x),
+					definitions.PointsToRatioV(y),
+					definitions.PointsToRatioV(width),
+					definitions.PointsToRatioV(height))
 				definitions.Game.Running = false
 			}
 		}
