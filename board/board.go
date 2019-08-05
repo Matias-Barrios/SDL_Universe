@@ -50,7 +50,7 @@ var Board = &board{
 	},
 }
 
-// this is the tall of the board minus the firs row
+// this is the tall of the board minus the first row
 var tall = len(Board.Cells) - 2
 
 // This represents how many columns of a row can be cleared,
@@ -108,7 +108,7 @@ func (b *board) ClearLines() {
 	for i := tall; i >= 0; i-- {
 		if checkIfFilled(Board.Cells[i][1:clearable_columns]) {
 			for j := i; j > 0; j-- {
-				for k := 1; k < clearable_columns; k++ {
+				for k := 1; k <= clearable_columns; k++ {
 					Board.Cells[j][k] = Board.Cells[j-1][k]
 				}
 			}
