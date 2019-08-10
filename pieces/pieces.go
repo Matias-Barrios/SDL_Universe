@@ -12,11 +12,12 @@ import (
 )
 
 type Piece struct {
-	PosX  int
-	PosY  int
-	Spin  int
-	VelY  int
-	Shape map[int][8][8]byte
+	PosX     int
+	PosY     int
+	Spin     int
+	VelY     int
+	Drifting uint8
+	Shape    map[int][8][8]byte
 }
 
 var AllPosiblePieces []string
@@ -24,9 +25,10 @@ var QtyOfPieces int
 
 var Pieces = map[string]Piece{
 	"line": {
-		PosX: 0,
-		PosY: 0,
-		Spin: 0,
+		PosX:     0,
+		PosY:     0,
+		Spin:     0,
+		Drifting: 0,
 		Shape: map[int][8][8]byte{
 			0: {
 				{0, 0, 0, 0, 0, 0, 0, 0},
@@ -71,9 +73,10 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"square": {
-		PosX: 0,
-		PosY: 0,
-		Spin: 0,
+		PosX:     0,
+		PosY:     0,
+		Spin:     0,
+		Drifting: 0,
 		Shape: map[int][8][8]byte{
 			0: {
 				{0, 0, 0, 0, 0, 0, 0, 0},
@@ -118,9 +121,10 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"l": {
-		PosX: 0,
-		PosY: 0,
-		Spin: 0,
+		PosX:     0,
+		PosY:     0,
+		Spin:     0,
+		Drifting: 0,
 		Shape: map[int][8][8]byte{
 			0: {
 				{0, 0, 0, 0, 0, 0, 0, 0},
@@ -165,9 +169,10 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"z": {
-		PosX: 0,
-		PosY: 0,
-		Spin: 0,
+		PosX:     0,
+		PosY:     0,
+		Spin:     0,
+		Drifting: 0,
 		Shape: map[int][8][8]byte{
 			0: {
 				{0, 0, 0, 0, 0, 0, 0, 0},
@@ -232,12 +237,16 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 func (p *Piece) Fall() {
 	if Fits(p, 0, 1, p.Spin) {
 		p.PosY += definitions.Game.Gravity
+		p.Drifting = 0
 	} else {
-		Fuse(p)
-		*p = Pieces[RandomPiece()]
-		p.Spin = 0
+		if p.Drifting == 5 {
+			Fuse(p)
+			*p = Pieces[RandomPiece()]
+			p.Spin = 0
+		} else {
+			p.Drifting++
+		}
 	}
-
 }
 
 func Fits(p *Piece, velx int, vely int, spin int) bool {

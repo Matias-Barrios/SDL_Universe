@@ -21,7 +21,7 @@ func main() {
 	defer sdl.Quit()
 	defer window.Destroy()
 	defer renderer.Destroy()
-	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
+	t := SDL.GetTexture(window, renderer, "backgrounds/sky.png")
 	SDL.LoadTextures(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
 	// MAIN LOOP ....
@@ -31,10 +31,11 @@ func main() {
 	running := true
 	go func() {
 		for running {
-			sdl.Delay(40)
+			sdl.Delay(definitions.Game.Delay)
 			thePiece.Fall()
 		}
 	}()
+
 	for {
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {

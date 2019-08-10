@@ -2,7 +2,6 @@ package definitions
 
 import (
 	"fmt"
-	"math"
 )
 
 // Screen deinitions
@@ -26,19 +25,21 @@ var Screen screen
 type game struct {
 	Gravity int
 	Running bool
+	Delay   uint32
 }
 
 var Game = &game{
 	Gravity: 10,
+	Delay:   40,
 	Running: true,
 }
 
 func PointsToRatioH(h float64) int {
-	return int(math.Ceil(float64(h) * ratioH))
+	return int(float64(h) * ratioH)
 }
 
 func PointsToRatioV(v float64) int {
-	return int(math.Ceil(float64(v) * ratioV))
+	return int(float64(v) * ratioV)
 }
 
 func init() {
