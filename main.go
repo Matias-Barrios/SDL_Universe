@@ -6,6 +6,7 @@ import (
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
+	"github.com/Matias-Barrios/SDL_Universe/elements"
 	"github.com/Matias-Barrios/SDL_Universe/pieces"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
@@ -70,9 +71,11 @@ func main() {
 			// Draw stuff
 			// ***********************
 
+			elements.NextPieceBox(renderer, thePiece)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
+
 			// // Present stuff
 			// // ***********************
 			renderer.Present()

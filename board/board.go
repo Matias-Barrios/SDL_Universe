@@ -16,8 +16,8 @@ type board struct {
 }
 
 var Board = &board{
-	X: definitions.PointsToRatioH(20),
-	Y: definitions.PointsToRatioV(20),
+	X: definitions.PointsToRatioH(10),
+	Y: -definitions.PointsToRatioV(float64(definitions.Screen.BlockSizeH * 5)),
 	Cells: [][]byte{
 		{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
 		{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
@@ -111,7 +111,7 @@ func (b *board) ClearLines() {
 			for j := i; j > 0; j-- {
 				Board.Cells[j] = Board.Cells[j-1]
 			}
-			Board.Cells[0] = []byte{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+			Board.Cells[0] = []byte{254, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 254}
 			i++
 		}
 	}
