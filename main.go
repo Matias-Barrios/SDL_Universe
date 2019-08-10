@@ -24,7 +24,6 @@ func main() {
 	t := SDL.GetTexture(window, renderer, "assets/uni.jpeg")
 	SDL.LoadTextures(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
-
 	// MAIN LOOP ....
 	// **************************************
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
@@ -73,9 +72,11 @@ func main() {
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
-			// Present stuff
-			// ***********************
+			// // Present stuff
+			// // ***********************
 			renderer.Present()
+		} else {
+
 		}
 
 	}

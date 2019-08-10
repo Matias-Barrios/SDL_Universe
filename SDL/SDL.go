@@ -60,7 +60,7 @@ func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
 
 // DrawStuff : Draw shit
 func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int, posy int, width int, height int) {
-	r.Copy(t, nil, &sdl.Rect{int32(posx), int32(posy), int32(width), int32(width)})
+	r.Copy(t, nil, &sdl.Rect{int32(posx), int32(posy), int32(width), int32(height)})
 }
 
 var Block_Textures map[string]*sdl.Texture

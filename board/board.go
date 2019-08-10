@@ -2,6 +2,7 @@ package board
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -42,10 +43,10 @@ var Board = &board{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	},
 }
@@ -81,22 +82,22 @@ func GameOver(r *sdl.Renderer) {
 			} else if sub_ix < 1 || sub_ix > 10 {
 				continue
 			} else if val != 0 {
-				x := definitions.PointsToRatioH(int(float64(definitions.Screen.Width) * 0.10))
-				y := definitions.PointsToRatioV(int(float64(definitions.Screen.Height) * 0.10))
-				width := definitions.PointsToRatioH(int(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*0.20)) - x
-				height := definitions.PointsToRatioV(int(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*0.20)) - y
+				x := definitions.PointsToRatioH(float64(definitions.Screen.Width) * 0.10)
+				y := definitions.PointsToRatioV(float64(definitions.Screen.Height) * 0.30)
+				width := definitions.PointsToRatioH(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*0.10) - x
+				height := definitions.PointsToRatioV(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*0.10) - y
 				fmt.Println([]int{
-					int(x),
-					int(y),
-					int(width),
-					int(height),
+					x,
+					y,
+					width,
+					height,
 				})
 				SDL.DrawStuff(r,
-					SDL.Messages_Textures["greyblock"],
-					definitions.PointsToRatioH(x),
-					definitions.PointsToRatioV(y),
-					definitions.PointsToRatioV(width),
-					definitions.PointsToRatioV(height))
+					SDL.Messages_Textures["gameover"],
+					definitions.PointsToRatioH(float64(x)),
+					definitions.PointsToRatioV(float64(y)),
+					definitions.PointsToRatioV(float64(width)),
+					definitions.PointsToRatioV(float64(height)))
 				definitions.Game.Running = false
 			}
 		}
@@ -108,11 +109,10 @@ func (b *board) ClearLines() {
 	for i := tall; i >= 0; i-- {
 		if checkIfFilled(Board.Cells[i][1:clearable_columns]) {
 			for j := i; j > 0; j-- {
-				for k := 1; k <= clearable_columns; k++ {
-					Board.Cells[j][k] = Board.Cells[j-1][k]
-				}
+				Board.Cells[j] = Board.Cells[j-1]
 			}
 			Board.Cells[0] = []byte{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+			i++
 		}
 	}
 }
@@ -124,4 +124,12 @@ func checkIfFilled(line []byte) bool {
 		}
 	}
 	return true
+}
+
+func (b *board) FillBoard() {
+	for ix, row := range Board.Cells {
+		for sub_ix, _ := range row {
+			Board.Cells[ix][sub_ix] = byte(rand.Intn(5))
+		}
+	}
 }

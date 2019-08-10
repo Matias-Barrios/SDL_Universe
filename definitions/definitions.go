@@ -1,6 +1,9 @@
 package definitions
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Screen deinitions
 
@@ -30,12 +33,12 @@ var Game = &game{
 	Running: true,
 }
 
-func PointsToRatioH(h int) int {
-	return int(float64(h) * ratioH)
+func PointsToRatioH(h float64) int {
+	return int(math.Ceil(float64(h) * ratioH))
 }
 
-func PointsToRatioV(v int) int {
-	return int(float64(v) * ratioV)
+func PointsToRatioV(v float64) int {
+	return int(math.Ceil(float64(v) * ratioV))
 }
 
 func init() {

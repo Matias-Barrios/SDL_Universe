@@ -1,6 +1,7 @@
 package pieces
 
 import (
+	"math"
 	"math/rand"
 	"time"
 
@@ -242,8 +243,10 @@ func (p *Piece) Fall() {
 func Fits(p *Piece, velx int, vely int, spin int) bool {
 	for ix, row := range p.Shape[spin] {
 		for sub_ix, val := range row {
-			if ix+((p.PosY/definitions.Screen.BlockSizeH)+vely) < len(board.Board.Cells) && sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) && ix+((p.PosY/definitions.Screen.BlockSizeH)+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
-				if val != 0 && board.Board.Cells[ix+((p.PosY/definitions.Screen.BlockSizeH)+vely)][sub_ix+(p.PosX+velx)] != 0 {
+			if ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely) < len(board.Board.Cells) &&
+				sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) &&
+				ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
+				if val != 0 && board.Board.Cells[ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely)][sub_ix+(p.PosX+velx)] != 0 {
 					return false
 				}
 			}
