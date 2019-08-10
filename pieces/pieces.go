@@ -234,14 +234,15 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 
 }
 
-func (p *Piece) Fall() {
+func (p *Piece) Fall(next *Piece) {
 	if Fits(p, 0, 1, p.Spin) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
 	} else {
 		if p.Drifting == 5 {
 			Fuse(p)
-			*p = Pieces[RandomPiece()]
+			*p = *next
+			*next = Pieces[RandomPiece()]
 			p.Spin = 0
 		} else {
 			p.Drifting++

@@ -29,11 +29,12 @@ func main() {
 	// **************************************
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
+	var next = pieces.Pieces[pieces.RandomPiece()]
 	running := true
 	go func() {
 		for running {
 			sdl.Delay(definitions.Game.Delay)
-			thePiece.Fall()
+			thePiece.Fall(&next)
 		}
 	}()
 
@@ -71,7 +72,7 @@ func main() {
 			// Draw stuff
 			// ***********************
 
-			elements.NextPieceBox(renderer, thePiece)
+			elements.NextPieceBox(renderer, next)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
