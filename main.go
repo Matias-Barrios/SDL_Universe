@@ -15,7 +15,7 @@ import (
 )
 
 var ANIMATIONS []*SDL.Animable
-var StopMovement bool = true
+var StopMovement bool = false
 
 func main() {
 	window, renderer, err := SDL.InitSDL()
@@ -52,8 +52,8 @@ func main() {
 	go func() {
 		for running {
 			if !StopMovement {
-				sdl.Delay(definitions.Game.Delay)
-				thePiece.Fall(&next)
+				sdl.Delay(1)
+				thePiece.Fall(&next, ANIMATIONS)
 			}
 		}
 	}()
@@ -74,6 +74,8 @@ func main() {
 					thePiece.Move(-1)
 				case sdl.K_RIGHT:
 					thePiece.Move(1)
+				case sdl.K_DOWN:
+					thePiece.Fall(&next, ANIMATIONS)
 				case sdl.K_a:
 					thePiece.SpinIt(-1)
 				case sdl.K_s:

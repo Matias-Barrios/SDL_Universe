@@ -1,6 +1,7 @@
 package pieces
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"time"
@@ -11,12 +12,15 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
+// How many milliseconds can you drift a piece before it fuses with the board ( depends on main loop delay which should be 1 millisecond)
+var driftlimit int = 600
+
 type Piece struct {
-	PosX     int
-	PosY     int
+	PosX     float64
+	PosY     float64
 	Spin     int
-	VelY     int
-	Drifting uint8
+	vely     int
+	Drifting int
 	Shape    map[int][8][8]byte
 }
 
@@ -224,8 +228,8 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 			if val != 0 {
 				SDL.DrawStuff(r,
 					SDL.Block_Textures[SDL.Translate(val)],
-					int((sub_ix*definitions.Screen.BlockSizeW)+((p.PosX)*definitions.Screen.BlockSizeW)+board.Board.X),
-					int((ix*definitions.Screen.BlockSizeH)+(p.PosY)+board.Board.Y),
+					int((sub_ix*definitions.Screen.BlockSizeW)+((int(p.PosX))*definitions.Screen.BlockSizeW)+board.Board.X),
+					int((ix*definitions.Screen.BlockSizeH)+(int(p.PosY))+board.Board.Y),
 					int(definitions.Screen.BlockSizeW),
 					int(definitions.Screen.BlockSizeH))
 			}
@@ -234,13 +238,13 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 
 }
 
-func (p *Piece) Fall(next *Piece) {
+func (p *Piece) Fall(next *Piece, a []*SDL.Animable) {
 	if Fits(p, 0, 1, p.Spin) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
 	} else {
-		if p.Drifting == 7 {
-			Fuse(p)
+		if p.Drifting == driftlimit {
+			Fuse(p, a)
 			*p = *next
 			*next = Pieces[RandomPiece()]
 			p.Spin = 0
@@ -250,13 +254,13 @@ func (p *Piece) Fall(next *Piece) {
 	}
 }
 
-func Fits(p *Piece, velx int, vely int, spin int) bool {
+func Fits(p *Piece, velx float64, vely float64, spin int) bool {
 	for ix, row := range p.Shape[spin] {
 		for sub_ix, val := range row {
-			if ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely) < len(board.Board.Cells) &&
-				sub_ix+(p.PosX+velx) < len(board.Board.Cells[0]) &&
-				ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely) > -1 && sub_ix+(p.PosX+velx) > -1 {
-				if val != 0 && board.Board.Cells[ix+(int(math.Ceil(float64(p.PosY/definitions.Screen.BlockSizeH)))+vely)][sub_ix+(p.PosX+velx)] != 0 {
+			if ix+(int(math.Ceil(float64(int(p.PosY)/definitions.Screen.BlockSizeH)))+int(vely)) < len(board.Board.Cells) &&
+				sub_ix+(int(p.PosX)+int(velx)) < len(board.Board.Cells[0]) &&
+				ix+(int(math.Ceil(float64(int(p.PosY)/definitions.Screen.BlockSizeH)))+int(vely)) > -1 && sub_ix+(int(p.PosX)+int(velx)) > -1 {
+				if val != 0 && board.Board.Cells[ix+(int(math.Ceil(float64(int(p.PosY)/definitions.Screen.BlockSizeH)))+int(vely))][sub_ix+(int(p.PosX)+int(velx))] != 0 {
 					return false
 				}
 			}
@@ -265,17 +269,38 @@ func Fits(p *Piece, velx int, vely int, spin int) bool {
 	return true
 }
 
-func Fuse(p *Piece) {
+func Fuse(p *Piece, animations []*SDL.Animable) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
-			if ix+(p.PosY/definitions.Screen.BlockSizeH) < len(board.Board.Cells) && sub_ix+p.PosX < len(board.Board.Cells[0]) && ix+(p.PosY/definitions.Screen.BlockSizeH) > -1 && sub_ix+p.PosX > -1 {
+			if ix+(int(p.PosY)/definitions.Screen.BlockSizeH) < len(board.Board.Cells) && sub_ix+int(p.PosX) < len(board.Board.Cells[0]) && ix+(int(p.PosY)/definitions.Screen.BlockSizeH) > -1 && sub_ix+int(p.PosX) > -1 {
 				if val != 0 {
-					board.Board.Cells[ix+(p.PosY/definitions.Screen.BlockSizeH)][sub_ix+p.PosX] = val
+					board.Board.Cells[ix+(int(p.PosY)/definitions.Screen.BlockSizeH)][sub_ix+int(p.PosX)] = val
 				}
 			}
 		}
 	}
-	board.Board.ClearLines()
+	cleared := board.Board.ClearLines()
+	if cleared != nil {
+		print("LEN : ", len(animations))
+		for _, rowCleared := range cleared {
+			animations = append(animations, &SDL.Animable{
+				Posx:     board.Board.X,
+				Posy:     board.Board.X + (rowCleared * definitions.Screen.BlockSizeH),
+				Width:    (10 * definitions.Screen.BlockSizeW),
+				Height:   definitions.Screen.BlockSizeH,
+				Textures: SDL.BeamTextures,
+				Timings:  []int{100, 100, 100, 2000},
+				Tick:     0,
+				Index:    0,
+				Endless:  false,
+				Finished: false,
+				Handler: func() {
+					fmt.Println("Done!!")
+				},
+			})
+		}
+		print("LEN : ", len(animations))
+	}
 }
 
 func init() {
@@ -290,7 +315,7 @@ func RandomPiece() string {
 	return AllPosiblePieces[rand.Intn(QtyOfPieces)]
 }
 
-func (p *Piece) Move(velx int) {
+func (p *Piece) Move(velx float64) {
 	if Fits(p, velx, 0, p.Spin) {
 		p.PosX += velx
 	} else {
