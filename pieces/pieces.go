@@ -239,7 +239,7 @@ func (p *Piece) Fall(next *Piece) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
 	} else {
-		if p.Drifting == 5 {
+		if p.Drifting == 7 {
 			Fuse(p)
 			*p = *next
 			*next = Pieces[RandomPiece()]

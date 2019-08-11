@@ -65,6 +65,7 @@ func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int, posy int, width int, h
 
 var Block_Textures map[string]*sdl.Texture
 var Messages_Textures map[string]*sdl.Texture
+var BeamTextures []*sdl.Texture
 
 // Bricks belong to https://opengameart.org/content/break-some-blocks - Chromaeleon
 // Thanks dude!
@@ -115,6 +116,12 @@ func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
 	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
 	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png")
+	BeamTextures = []*sdl.Texture{
+		GetTexture(w, r, "animations/beam/beam1.png"),
+		GetTexture(w, r, "animations/beam/beam2.png"),
+		GetTexture(w, r, "animations/beam/beam3.png"),
+		GetTexture(w, r, "animations/beam/beam4.png"),
+	}
 }
 
 func Translate(number byte) string {
@@ -151,4 +158,42 @@ func Translate(number byte) string {
 		log.Fatalf("%s\n", fmt.Errorf("Unknown identifier for texture"))
 	}
 	return ""
+}
+
+type Animable struct {
+	Posx     int
+	Posy     int
+	Height   int
+	Width    int
+	Textures []*sdl.Texture
+	Timings  []int
+	Tick     int
+	Index    int
+	Endless  bool
+	Finished bool
+	Handler  func()
+}
+
+func (a *Animable) Draw(r *sdl.Renderer) {
+	DrawStuff(r, a.Textures[a.Index], a.Posx, a.Posy, a.Width, a.Height)
+	if a.Tick > a.Timings[a.Index] {
+		a.Index++
+		if a.Index > len(a.Timings)-1 {
+			a.Index = 0
+			if a.Endless == false {
+				a.Finished = true
+				if a.Handler != nil {
+					a.Handler()
+				}
+			}
+		}
+		a.Tick = 0
+	} else {
+		a.Tick++
+	}
+
+}
+
+func RemoveAnimationAtIndex(slice []*Animable, s int) []*Animable {
+	return append(slice[:s], slice[s+1:]...)
 }

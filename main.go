@@ -14,6 +14,9 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
+var ANIMATIONS []*SDL.Animable
+var StopMovement bool = true
+
 func main() {
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
@@ -30,11 +33,28 @@ func main() {
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
+	ANIMATIONS = append(ANIMATIONS, &SDL.Animable{
+		Posx:     0,
+		Posy:     0,
+		Width:    200,
+		Height:   70,
+		Textures: SDL.BeamTextures,
+		Timings:  []int{10, 10, 10, 400},
+		Tick:     0,
+		Index:    0,
+		Endless:  false,
+		Finished: false,
+		Handler: func() {
+			StopMovement = false
+		},
+	})
 	running := true
 	go func() {
 		for running {
-			sdl.Delay(definitions.Game.Delay)
-			thePiece.Fall(&next)
+			if !StopMovement {
+				sdl.Delay(definitions.Game.Delay)
+				thePiece.Fall(&next)
+			}
 		}
 	}()
 
@@ -77,12 +97,23 @@ func main() {
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
 
+			// Animables
+			// ************************
+
+			for index, a := range ANIMATIONS {
+				if !a.Finished {
+					a.Draw(renderer)
+				} else {
+					ANIMATIONS = SDL.RemoveAnimationAtIndex(ANIMATIONS, index)
+				}
+			}
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
 		} else {
 
 		}
+		sdl.Delay(1)
 
 	}
 	sdl.Delay(2000)
