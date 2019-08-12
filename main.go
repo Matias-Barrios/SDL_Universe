@@ -15,12 +15,11 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-var ANIMATIONS *[]*SDL.Animable
-var StopMovement bool = false
-
 func main() {
 	tmp := make([]*SDL.Animable, 0, 100)
-	ANIMATIONS = &tmp
+	btmp := false
+	SDL.Ctx.ANIMATIONS = &tmp
+	SDL.Ctx.StopMovement = &btmp
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
@@ -37,7 +36,7 @@ func main() {
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
 	fmt.Println("Pumba")
-	*ANIMATIONS = append(*ANIMATIONS, &SDL.Animable{
+	*SDL.Ctx.ANIMATIONS = append(*SDL.Ctx.ANIMATIONS, &SDL.Animable{
 		Posx:     0,
 		Posy:     0,
 		Width:    200,
@@ -48,17 +47,14 @@ func main() {
 		Index:    0,
 		Endless:  true,
 		Finished: false,
-		Handler: func() {
-			StopMovement = false
-		},
+		Handler:  nil,
 	})
-	fmt.Println("Done!")
 	running := true
 	go func() {
 		for running {
-			if !StopMovement {
+			if !*SDL.Ctx.StopMovement {
 				sdl.Delay(1)
-				thePiece.Fall(&next, ANIMATIONS)
+				thePiece.Fall(&next, SDL.Ctx)
 			}
 		}
 	}()
@@ -80,7 +76,7 @@ func main() {
 				case sdl.K_RIGHT:
 					thePiece.Move(1)
 				case sdl.K_DOWN:
-					thePiece.Fall(&next, ANIMATIONS)
+					thePiece.Fall(&next, SDL.Ctx)
 				case sdl.K_a:
 					thePiece.SpinIt(-1)
 				case sdl.K_s:
@@ -107,16 +103,16 @@ func main() {
 			// Animables
 			// ************************
 
-			for _, a := range *ANIMATIONS {
+			for _, a := range *SDL.Ctx.ANIMATIONS {
 				if !a.Finished {
 					a.Draw(renderer)
 				}
 			}
 		LOOP:
 			for {
-				for index, a := range *ANIMATIONS {
+				for index, a := range *SDL.Ctx.ANIMATIONS {
 					if a.Finished {
-						*ANIMATIONS = SDL.RemoveAnimationAtIndex(*ANIMATIONS, index)
+						*SDL.Ctx.ANIMATIONS = SDL.RemoveAnimationAtIndex(*SDL.Ctx.ANIMATIONS, index)
 						continue LOOP
 					}
 				}

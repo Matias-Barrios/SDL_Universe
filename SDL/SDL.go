@@ -10,6 +10,13 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
+type GameContext struct {
+	ANIMATIONS   *[]*Animable
+	StopMovement *bool
+}
+
+var Ctx GameContext
+
 func InitSDL() (*sdl.Window, *sdl.Renderer, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return &sdl.Window{}, &sdl.Renderer{}, err
