@@ -12,7 +12,7 @@ import (
 )
 
 // How many milliseconds can you drift a piece before it fuses with the board ( depends on main loop delay which should be 1 millisecond)
-var driftlimit int = 600
+var driftlimit int = 400
 
 type Piece struct {
 	PosX     float64
@@ -237,7 +237,7 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 
 }
 
-func (p *Piece) Fall(next *Piece, c SDL.GameContext) {
+func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 	if Fits(p, 0, 1, p.Spin) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
@@ -268,7 +268,7 @@ func Fits(p *Piece, velx float64, vely float64, spin int) bool {
 	return true
 }
 
-func Fuse(p *Piece, ctx SDL.GameContext) {
+func Fuse(p *Piece, ctx *SDL.GameContext) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if ix+(int(p.PosY)/definitions.Screen.BlockSizeH) < len(board.Board.Cells) && sub_ix+int(p.PosX) < len(board.Board.Cells[0]) && ix+(int(p.PosY)/definitions.Screen.BlockSizeH) > -1 && sub_ix+int(p.PosX) > -1 {
@@ -278,11 +278,12 @@ func Fuse(p *Piece, ctx SDL.GameContext) {
 			}
 		}
 	}
-	cleared := board.Board.ClearLines()
+	cleared := board.Board.GetFilled()
 	if cleared != nil {
-		*ctx.StopMovement = true
+		ctx.StopMovement = true
+		ctx.ClearLines = false
 		for _, rowCleared := range cleared {
-			*ctx.ANIMATIONS = append(*ctx.ANIMATIONS, &SDL.Animable{
+			ctx.ANIMATIONS = append(ctx.ANIMATIONS, &SDL.Animable{
 				Posx:     board.Board.X + definitions.Screen.BlockSizeW,
 				Posy:     board.Board.Y + (rowCleared * definitions.Screen.BlockSizeH),
 				Width:    (10 * definitions.Screen.BlockSizeW),
@@ -294,7 +295,8 @@ func Fuse(p *Piece, ctx SDL.GameContext) {
 				Endless:  false,
 				Finished: false,
 				Handler: func() {
-					*ctx.StopMovement = false
+					ctx.StopMovement = false
+					ctx.ClearLines = true
 				},
 			})
 		}

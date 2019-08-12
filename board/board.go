@@ -1,7 +1,6 @@
 package board
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
@@ -86,12 +85,6 @@ func GameOver(r *sdl.Renderer) {
 				y := definitions.PointsToRatioV(float64(definitions.Screen.Height) * 0.30)
 				width := definitions.PointsToRatioH(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*0.10) - x
 				height := definitions.PointsToRatioV(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*0.10) - y
-				fmt.Println([]int{
-					x,
-					y,
-					width,
-					height,
-				})
 				SDL.DrawStuff(r,
 					SDL.Messages_Textures["gameover"],
 					definitions.PointsToRatioH(float64(x)),

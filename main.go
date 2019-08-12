@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -16,10 +15,10 @@ import (
 )
 
 func main() {
-	tmp := make([]*SDL.Animable, 0, 100)
-	btmp := false
-	SDL.Ctx.ANIMATIONS = &tmp
-	SDL.Ctx.StopMovement = &btmp
+	SDL.Ctx.ANIMATIONS = make([]*SDL.Animable, 0, 100)
+	SDL.Ctx.StopMovement = false
+
+	SDL.Ctx.ClearLines = true
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
@@ -28,6 +27,7 @@ func main() {
 	defer window.Destroy()
 	defer renderer.Destroy()
 	t := SDL.GetTexture(window, renderer, "backgrounds/sky.png")
+
 	SDL.LoadTextures(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
 	// MAIN LOOP ....
@@ -35,29 +35,20 @@ func main() {
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
-	fmt.Println("Pumba")
-	*SDL.Ctx.ANIMATIONS = append(*SDL.Ctx.ANIMATIONS, &SDL.Animable{
-		Posx:     0,
-		Posy:     0,
-		Width:    200,
-		Height:   70,
-		Textures: SDL.BeamTextures,
-		Timings:  []int{10, 10, 10, 400},
-		Tick:     0,
-		Index:    0,
-		Endless:  true,
-		Finished: false,
-		Handler:  nil,
-	})
-	running := true
-	go func() {
-		for running {
-			if !*SDL.Ctx.StopMovement {
-				sdl.Delay(1)
-				thePiece.Fall(&next, SDL.Ctx)
-			}
-		}
-	}()
+
+	// SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
+	// 	Posx:     0,
+	// 	Posy:     0,
+	// 	Width:    200,
+	// 	Height:   70,
+	// 	Textures: SDL.BeamTextures,
+	// 	Timings:  []int{10, 10, 10, 400},
+	// 	Tick:     0,
+	// 	Index:    0,
+	// 	Endless:  true,
+	// 	Finished: false,
+	// 	Handler:  nil,
+	// })
 
 	for {
 		// Poll for SDL events
@@ -76,7 +67,7 @@ func main() {
 				case sdl.K_RIGHT:
 					thePiece.Move(1)
 				case sdl.K_DOWN:
-					thePiece.Fall(&next, SDL.Ctx)
+					thePiece.Fall(&next, &SDL.Ctx)
 				case sdl.K_a:
 					thePiece.SpinIt(-1)
 				case sdl.K_s:
@@ -94,7 +85,9 @@ func main() {
 
 			// Draw stuff
 			// ***********************
-
+			if !SDL.Ctx.StopMovement {
+				thePiece.Fall(&next, &SDL.Ctx)
+			}
 			elements.NextPieceBox(renderer, next)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
@@ -103,22 +96,24 @@ func main() {
 			// Animables
 			// ************************
 
-			for _, a := range *SDL.Ctx.ANIMATIONS {
+			for _, a := range SDL.Ctx.ANIMATIONS {
 				if !a.Finished {
 					a.Draw(renderer)
 				}
 			}
 		LOOP:
 			for {
-				for index, a := range *SDL.Ctx.ANIMATIONS {
+				for index, a := range SDL.Ctx.ANIMATIONS {
 					if a.Finished {
-						*SDL.Ctx.ANIMATIONS = SDL.RemoveAnimationAtIndex(*SDL.Ctx.ANIMATIONS, index)
+						SDL.Ctx.ANIMATIONS = SDL.RemoveAnimationAtIndex(SDL.Ctx.ANIMATIONS, index)
 						continue LOOP
 					}
 				}
 				break
 			}
-
+			if SDL.Ctx.ClearLines {
+				board.Board.ClearLines()
+			}
 			// // Present stuff
 			// // ***********************
 			renderer.Present()

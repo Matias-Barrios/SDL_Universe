@@ -1,9 +1,5 @@
 package definitions
 
-import (
-	"fmt"
-)
-
 // Screen deinitions
 
 const (
@@ -29,8 +25,8 @@ type game struct {
 }
 
 var Game = &game{
-	Gravity: 0.20,
-	Delay:   40,
+	Gravity: 0.80,
+	Delay:   10,
 	Running: true,
 }
 
@@ -49,5 +45,4 @@ func init() {
 		BlockSizeW: PointsToRatioH(25),
 		BlockSizeH: PointsToRatioV(25),
 	}
-	fmt.Println(PointsToRatioH(50))
 }

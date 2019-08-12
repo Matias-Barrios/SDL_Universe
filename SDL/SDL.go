@@ -11,8 +11,9 @@ import (
 )
 
 type GameContext struct {
-	ANIMATIONS   *[]*Animable
-	StopMovement *bool
+	ANIMATIONS   []*Animable
+	StopMovement bool
+	ClearLines   bool
 }
 
 var Ctx GameContext
