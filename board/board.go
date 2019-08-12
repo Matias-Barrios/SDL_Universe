@@ -106,15 +106,24 @@ func GameOver(r *sdl.Renderer) {
 }
 
 func (b *board) ClearLines() []int {
-	var res []int
+	var res = Board.GetFilled()
 	for i := tall; i >= 0; i-- {
 		if checkIfFilled(Board.Cells[i][1:clearable_columns]) {
-			res = append(res, i)
 			for j := i; j > 0; j-- {
 				Board.Cells[j] = Board.Cells[j-1]
 			}
 			Board.Cells[0] = []byte{254, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 254}
 			i++
+		}
+	}
+	return res
+}
+
+func (b *board) GetFilled() []int {
+	var res []int
+	for i := tall; i >= 0; i-- {
+		if checkIfFilled(Board.Cells[i][1:clearable_columns]) {
+			res = append(res, i)
 		}
 	}
 	return res

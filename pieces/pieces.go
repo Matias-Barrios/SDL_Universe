@@ -238,7 +238,7 @@ func (p *Piece) Draw(r *sdl.Renderer) {
 
 }
 
-func (p *Piece) Fall(next *Piece, a []*SDL.Animable) {
+func (p *Piece) Fall(next *Piece, a *[]*SDL.Animable) {
 	if Fits(p, 0, 1, p.Spin) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
@@ -269,7 +269,7 @@ func Fits(p *Piece, velx float64, vely float64, spin int) bool {
 	return true
 }
 
-func Fuse(p *Piece, animations []*SDL.Animable) {
+func Fuse(p *Piece, animations *[]*SDL.Animable) {
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if ix+(int(p.PosY)/definitions.Screen.BlockSizeH) < len(board.Board.Cells) && sub_ix+int(p.PosX) < len(board.Board.Cells[0]) && ix+(int(p.PosY)/definitions.Screen.BlockSizeH) > -1 && sub_ix+int(p.PosX) > -1 {
@@ -281,15 +281,15 @@ func Fuse(p *Piece, animations []*SDL.Animable) {
 	}
 	cleared := board.Board.ClearLines()
 	if cleared != nil {
-		print("LEN : ", len(animations))
 		for _, rowCleared := range cleared {
-			animations = append(animations, &SDL.Animable{
-				Posx:     board.Board.X,
-				Posy:     board.Board.X + (rowCleared * definitions.Screen.BlockSizeH),
+			fmt.Println("ROW : ", rowCleared)
+			*animations = append(*animations, &SDL.Animable{
+				Posx:     board.Board.X + definitions.Screen.BlockSizeW,
+				Posy:     board.Board.Y + (rowCleared * definitions.Screen.BlockSizeH),
 				Width:    (10 * definitions.Screen.BlockSizeW),
 				Height:   definitions.Screen.BlockSizeH,
 				Textures: SDL.BeamTextures,
-				Timings:  []int{100, 100, 100, 2000},
+				Timings:  []int{10, 10, 10, 50},
 				Tick:     0,
 				Index:    0,
 				Endless:  false,
@@ -299,7 +299,6 @@ func Fuse(p *Piece, animations []*SDL.Animable) {
 				},
 			})
 		}
-		print("LEN : ", len(animations))
 	}
 }
 

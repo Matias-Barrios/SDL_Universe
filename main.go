@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -14,10 +15,12 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-var ANIMATIONS []*SDL.Animable
+var ANIMATIONS *[]*SDL.Animable
 var StopMovement bool = false
 
 func main() {
+	tmp := make([]*SDL.Animable, 0, 100)
+	ANIMATIONS = &tmp
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
@@ -33,7 +36,8 @@ func main() {
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
-	ANIMATIONS = append(ANIMATIONS, &SDL.Animable{
+	fmt.Println("Pumba")
+	*ANIMATIONS = append(*ANIMATIONS, &SDL.Animable{
 		Posx:     0,
 		Posy:     0,
 		Width:    200,
@@ -42,12 +46,13 @@ func main() {
 		Timings:  []int{10, 10, 10, 400},
 		Tick:     0,
 		Index:    0,
-		Endless:  false,
+		Endless:  true,
 		Finished: false,
 		Handler: func() {
 			StopMovement = false
 		},
 	})
+	fmt.Println("Done!")
 	running := true
 	go func() {
 		for running {
@@ -102,13 +107,22 @@ func main() {
 			// Animables
 			// ************************
 
-			for index, a := range ANIMATIONS {
+			for _, a := range *ANIMATIONS {
 				if !a.Finished {
 					a.Draw(renderer)
-				} else {
-					ANIMATIONS = SDL.RemoveAnimationAtIndex(ANIMATIONS, index)
 				}
 			}
+		LOOP:
+			for {
+				for index, a := range *ANIMATIONS {
+					if a.Finished {
+						*ANIMATIONS = SDL.RemoveAnimationAtIndex(*ANIMATIONS, index)
+						continue LOOP
+					}
+				}
+				break
+			}
+
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
