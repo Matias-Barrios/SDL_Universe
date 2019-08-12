@@ -11,6 +11,7 @@ import (
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 
+	"github.com/veandco/go-sdl2/mix"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -23,9 +24,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
 	}
+	if err := sdl.Init(sdl.INIT_AUDIO); err != nil {
+		panic(err)
+		return
+	}
+
+	if err := mix.OpenAudio(44100, mix.DEFAULT_FORMAT, 2, 4096); err != nil {
+		log.Println(err)
+		return
+	}
+
 	defer sdl.Quit()
 	defer window.Destroy()
 	defer renderer.Destroy()
+	defer mix.CloseAudio()
 	t := SDL.GetTexture(window, renderer, "backgrounds/sky.png")
 
 	SDL.LoadTextures(window, renderer)

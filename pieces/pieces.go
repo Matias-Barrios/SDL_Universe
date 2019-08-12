@@ -1,6 +1,7 @@
 package pieces
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"time"
@@ -243,6 +244,8 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 		p.Drifting = 0
 	} else {
 		if p.Drifting == driftlimit {
+			fmt.Println(SDL.AUDIOS)
+			SDL.AUDIOS["point_normal"].Play(-1, 1)
 			Fuse(p, c)
 			*p = *next
 			*next = Pieces[RandomPiece()]
