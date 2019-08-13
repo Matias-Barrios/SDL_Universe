@@ -18,7 +18,7 @@ func LoadAudio(path string) *mix.Chunk {
 	if err := mix.OpenAudio(44100, mix.DEFAULT_FORMAT, 2, 4096); err != nil {
 		log.Fatalf("%s\n", err.Error())
 	}
-	defer mix.CloseAudio()
+	
 
 	// Load entire WAV data from file
 	data, err := ioutil.ReadFile(path)
@@ -33,4 +33,8 @@ func LoadAudio(path string) *mix.Chunk {
 	}
 	defer chunk.Free()
 	return chunk
+}
+
+func CloseAudio() {
+	mix.CloseAudio()
 }

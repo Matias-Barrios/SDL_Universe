@@ -2,6 +2,7 @@ package pieces
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"math/rand"
 	"time"
@@ -245,7 +246,10 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 	} else {
 		if p.Drifting == driftlimit {
 			fmt.Println(SDL.AUDIOS)
-			SDL.AUDIOS["point_normal"].Play(-1, 1)
+			_, err := SDL.AUDIOS["point_normal"].Play(-1, 1)
+			if err != nil {
+				log.Fatalln(err.Error())
+			}
 			Fuse(p, c)
 			*p = *next
 			*next = Pieces[RandomPiece()]

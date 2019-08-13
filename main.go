@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"sync"
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -16,10 +17,14 @@ import (
 )
 
 func main() {
+	// Setting Game context
 	SDL.Ctx.ANIMATIONS = make([]*SDL.Animable, 0, 100)
 	SDL.Ctx.StopMovement = false
-
 	SDL.Ctx.ClearLines = true
+
+	// Main WaitGroup
+	var wg sync.WaitGroup
+
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
@@ -47,20 +52,6 @@ func main() {
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
-
-	// SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
-	// 	Posx:     0,
-	// 	Posy:     0,
-	// 	Width:    200,
-	// 	Height:   70,
-	// 	Textures: SDL.BeamTextures,
-	// 	Timings:  []int{10, 10, 10, 400},
-	// 	Tick:     0,
-	// 	Index:    0,
-	// 	Endless:  true,
-	// 	Finished: false,
-	// 	Handler:  nil,
-	// })
 
 	for {
 		// Poll for SDL events
@@ -107,12 +98,16 @@ func main() {
 
 			// Animables
 			// ************************
-
+			wg.Add(len(SDL.Ctx.ANIMATIONS))
 			for _, a := range SDL.Ctx.ANIMATIONS {
-				if !a.Finished {
-					a.Draw(renderer)
-				}
+				go func(anim *SDL.Animable, wait *sync.WaitGroup) {
+					if !anim.Finished {
+						anim.Draw(renderer)
+					}
+					wait.Done()
+				}(a, &wg)
 			}
+			wg.Wait()
 		LOOP:
 			for {
 				for index, a := range SDL.Ctx.ANIMATIONS {
@@ -133,7 +128,6 @@ func main() {
 
 		}
 		sdl.Delay(1)
-
 	}
 	sdl.Delay(2000)
 	// END MAIN LOOP ....
