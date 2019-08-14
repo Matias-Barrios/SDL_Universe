@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"sync"
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -21,9 +20,6 @@ func main() {
 	SDL.Ctx.ANIMATIONS = make([]*SDL.Animable, 0, 100)
 	SDL.Ctx.StopMovement = false
 	SDL.Ctx.ClearLines = true
-
-	// Main WaitGroup
-	var wg sync.WaitGroup
 
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
@@ -98,16 +94,11 @@ func main() {
 
 			// Animables
 			// ************************
-			wg.Add(len(SDL.Ctx.ANIMATIONS))
 			for _, a := range SDL.Ctx.ANIMATIONS {
-				go func(anim *SDL.Animable, wait *sync.WaitGroup) {
-					if !anim.Finished {
-						anim.Draw(renderer)
-					}
-					wait.Done()
-				}(a, &wg)
+				if !a.Finished {
+					a.Draw(renderer)
+				}
 			}
-			wg.Wait()
 		LOOP:
 			for {
 				for index, a := range SDL.Ctx.ANIMATIONS {

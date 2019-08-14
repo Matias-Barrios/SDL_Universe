@@ -11,15 +11,13 @@ var AUDIOS map[string]*mix.Chunk
 
 func init() {
 	AUDIOS = make(map[string]*mix.Chunk)
-	AUDIOS["point_normal"] = LoadAudio("sound/effects/point_normal.wav")
+	AUDIOS["point_normal"] = LoadAudio("sound/effects/test.wav")
 }
 
 func LoadAudio(path string) *mix.Chunk {
 	if err := mix.OpenAudio(44100, mix.DEFAULT_FORMAT, 2, 4096); err != nil {
 		log.Fatalf("%s\n", err.Error())
 	}
-	
-
 	// Load entire WAV data from file
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -31,7 +29,6 @@ func LoadAudio(path string) *mix.Chunk {
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
 	}
-	defer chunk.Free()
 	return chunk
 }
 

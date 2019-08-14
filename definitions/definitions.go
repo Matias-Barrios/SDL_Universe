@@ -21,12 +21,10 @@ var Screen screen
 type game struct {
 	Gravity float64
 	Running bool
-	Delay   uint32
 }
 
 var Game = &game{
 	Gravity: 0.80,
-	Delay:   10,
 	Running: true,
 }
 

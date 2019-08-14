@@ -1,7 +1,6 @@
 package pieces
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -14,7 +13,7 @@ import (
 )
 
 // How many milliseconds can you drift a piece before it fuses with the board ( depends on main loop delay which should be 1 millisecond)
-var driftlimit int = 400
+var driftlimit int = 200
 
 type Piece struct {
 	PosX     float64
@@ -245,8 +244,7 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 		p.Drifting = 0
 	} else {
 		if p.Drifting == driftlimit {
-			fmt.Println(SDL.AUDIOS)
-			_, err := SDL.AUDIOS["point_normal"].Play(-1, 1)
+			_, err := SDL.AUDIOS["point_normal"].Play(1, 0)
 			if err != nil {
 				log.Fatalln(err.Error())
 			}
