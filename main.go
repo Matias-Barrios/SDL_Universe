@@ -87,7 +87,10 @@ func main() {
 			if !SDL.Ctx.StopMovement {
 				thePiece.Fall(&next, &SDL.Ctx)
 			}
+			// Elements
+			// ***********************
 			elements.NextPieceBox(renderer, next)
+			elements.DrawText("Hola!", elements.FONTS["test"], window)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
