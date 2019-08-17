@@ -119,6 +119,7 @@ func main() {
 
 		}
 		sdl.Delay(1)
+		// renderer.Clear()
 	}
 	sdl.Delay(2000)
 	// END MAIN LOOP ....

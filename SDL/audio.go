@@ -11,7 +11,7 @@ var AUDIOS map[string]*mix.Chunk
 
 func init() {
 	AUDIOS = make(map[string]*mix.Chunk)
-	AUDIOS["point_normal"] = LoadAudio("sound/effects/test.wav")
+	AUDIOS["point_normal"] = LoadAudio("sound/effects/fuse.wav")
 }
 
 func LoadAudio(path string) *mix.Chunk {

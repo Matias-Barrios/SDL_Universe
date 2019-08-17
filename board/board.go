@@ -70,7 +70,6 @@ func Draw(r *sdl.Renderer) {
 			}
 		}
 	}
-
 }
 
 func GameOver(r *sdl.Renderer) {
