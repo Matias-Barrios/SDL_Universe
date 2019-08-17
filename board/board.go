@@ -72,7 +72,7 @@ func Draw(r *sdl.Renderer) {
 	}
 }
 
-func GameOver(r *sdl.Renderer) {
+func Lose(r *sdl.Renderer, ctx *SDL.GameContext) {
 	for ix, row := range Board.Cells {
 		for sub_ix, val := range row {
 			if ix > 7 {
@@ -80,17 +80,23 @@ func GameOver(r *sdl.Renderer) {
 			} else if sub_ix < 1 || sub_ix > 10 {
 				continue
 			} else if val != 0 {
-				x := definitions.PointsToRatioH(float64(definitions.Screen.Width) * 0.10)
-				y := definitions.PointsToRatioV(float64(definitions.Screen.Height) * 0.30)
-				width := definitions.PointsToRatioH(float64(definitions.Screen.Width)-float64(definitions.Screen.Width)*0.10) - x
-				height := definitions.PointsToRatioV(float64(definitions.Screen.Height)-float64(definitions.Screen.Height)*0.10) - y
-				SDL.DrawStuff(r,
-					SDL.Messages_Textures["gameover"],
-					definitions.PointsToRatioH(float64(x)),
-					definitions.PointsToRatioV(float64(y)),
-					definitions.PointsToRatioV(float64(width)),
-					definitions.PointsToRatioV(float64(height)))
-				definitions.Game.Running = false
+				ctx.StopMovement = true
+				ctx.ClearLines = false
+				ctx.ANIMATIONS = append(ctx.ANIMATIONS, &SDL.Animable{
+					Posx:     definitions.PointsToRatioH(float64(Board.X + definitions.Screen.BlockSizeW)),
+					Posy:     definitions.PointsToRatioV(float64(Board.Y + (definitions.Screen.BlockSizeH * 10))),
+					Width:    definitions.PointsToRatioH(float64(definitions.Screen.BlockSizeW * 10)),
+					Height:   definitions.PointsToRatioV(float64(definitions.Screen.BlockSizeH * 10)),
+					Textures: SDL.YouLoseTextures,
+					Timings:  []int{100, 100, 100, 100},
+					Tick:     0,
+					Index:    0,
+					Endless:  true,
+					Finished: false,
+					Handler: func() {
+
+					},
+				})
 			}
 		}
 	}

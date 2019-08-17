@@ -73,7 +73,6 @@ func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int, posy int, width int, h
 
 var Block_Textures map[string]*sdl.Texture
 var Messages_Textures map[string]*sdl.Texture
-var BeamTextures []*sdl.Texture
 
 // Bricks belong to https://opengameart.org/content/break-some-blocks - Chromaeleon
 // Thanks dude!
@@ -124,12 +123,7 @@ func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
 	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
 	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png")
-	BeamTextures = []*sdl.Texture{
-		GetTexture(w, r, "animations/beam/beam1.png"),
-		GetTexture(w, r, "animations/beam/beam2.png"),
-		GetTexture(w, r, "animations/beam/beam3.png"),
-		GetTexture(w, r, "animations/beam/beam4.png"),
-	}
+
 }
 
 func Translate(number byte) string {

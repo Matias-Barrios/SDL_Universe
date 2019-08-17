@@ -42,7 +42,25 @@ func main() {
 	t := SDL.GetTexture(window, renderer, "backgrounds/sky.png")
 
 	SDL.LoadTextures(window, renderer)
+	SDL.LoadAnimations(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
+
+	SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
+		Posx:     0,
+		Posy:     0,
+		Width:    200,
+		Height:   50,
+		Textures: SDL.BeamTextures,
+		Timings:  []int{100, 100, 100, 100},
+		Tick:     0,
+		Index:    0,
+		Endless:  true,
+		Finished: false,
+		Handler: func() {
+
+		},
+	})
+
 	// MAIN LOOP ....
 	// **************************************
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
@@ -90,7 +108,7 @@ func main() {
 			elements.NextPieceBox(renderer, next)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
-			board.GameOver(renderer)
+			board.Lose(renderer, &SDL.Ctx)
 
 			// Animables
 			// ************************
