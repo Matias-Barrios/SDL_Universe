@@ -88,7 +88,7 @@ func Lose(r *sdl.Renderer, ctx *SDL.GameContext) {
 					Width:    definitions.PointsToRatioH(float64(definitions.Screen.BlockSizeW * 10)),
 					Height:   definitions.PointsToRatioV(float64(definitions.Screen.BlockSizeH * 10)),
 					Textures: SDL.YouLoseTextures,
-					Timings:  []int{100, 100, 100, 100},
+					Timings:  []int{100},
 					Tick:     0,
 					Index:    0,
 					Endless:  true,

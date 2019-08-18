@@ -109,7 +109,6 @@ func main() {
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
-
 			// Animables
 			// ************************
 			for _, a := range SDL.Ctx.ANIMATIONS {
