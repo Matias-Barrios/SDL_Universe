@@ -105,7 +105,10 @@ func main() {
 			if !SDL.Ctx.StopMovement {
 				thePiece.Fall(&next, &SDL.Ctx)
 			}
-			elements.NextPieceBox(renderer, next)
+			// Elements
+			// ***********************
+			//elements.NextPieceBox(renderer, next)
+			elements.DrawText("Hozxzzzzczxczxxxxxxxxxxczxczxczla!", elements.FONTS["test"], window)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
@@ -132,6 +135,7 @@ func main() {
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
+			window.UpdateSurface()
 		} else {
 
 		}
