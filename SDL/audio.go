@@ -37,6 +37,6 @@ func CloseAudio() {
 	mix.CloseAudio()
 }
 
-func isPlaying(channel int) bool {
-	return mix.Playing(channel)
+func IsPlaying(channel int) bool {
+	return mix.Playing(channel) == 1
 }
