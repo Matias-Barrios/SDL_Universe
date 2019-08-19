@@ -244,7 +244,7 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 		p.Drifting = 0
 	} else {
 		if p.Drifting == driftlimit {
-			_, err := SDL.AUDIOS["point_normal"].Play(1, 0)
+			_, err := SDL.AUDIOS["piecedrop"].Play(-1, 0)
 			if err != nil {
 				log.Fatalln(err.Error())
 			}

@@ -45,21 +45,21 @@ func main() {
 	SDL.LoadAnimations(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
 
-	SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
-		Posx:     0,
-		Posy:     0,
-		Width:    200,
-		Height:   50,
-		Textures: SDL.BeamTextures,
-		Timings:  []int{100, 100, 100, 100},
-		Tick:     0,
-		Index:    0,
-		Endless:  true,
-		Finished: false,
-		Handler: func() {
+	// SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
+	// 	Posx:     0,
+	// 	Posy:     0,
+	// 	Width:    200,
+	// 	Height:   50,
+	// 	Textures: SDL.BeamTextures,
+	// 	Timings:  []int{100, 100, 100, 100},
+	// 	Tick:     0,
+	// 	Index:    0,
+	// 	Endless:  true,
+	// 	Finished: false,
+	// 	Handler: func() {
 
-		},
-	})
+	// 	},
+	// })
 
 	// MAIN LOOP ....
 	// **************************************
