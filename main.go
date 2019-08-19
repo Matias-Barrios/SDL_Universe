@@ -6,6 +6,7 @@ import (
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
+	"github.com/Matias-Barrios/SDL_Universe/elements"
 	"github.com/Matias-Barrios/SDL_Universe/pieces"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
@@ -89,7 +90,7 @@ func main() {
 			// Elements
 			// ***********************
 			//elements.NextPieceBox(renderer, next)
-			//elements.DrawText("Hola!", elements.FONTS["test"], window)
+			elements.DrawText("Hozxzzzzczxczxxxxxxxxxxczxczxczla!", elements.FONTS["test"], window)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.GameOver(renderer)
@@ -117,6 +118,7 @@ func main() {
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
+			window.UpdateSurface()
 		} else {
 
 		}

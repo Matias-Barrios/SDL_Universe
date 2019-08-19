@@ -57,6 +57,7 @@ func DrawText(text string, font *ttf.Font, window *sdl.Window) {
 	if err := solid.Blit(nil, surface, nil); err != nil {
 		log.Fatalln("blit: ", err.Error())
 	}
+	window.UpdateSurfaceRects([]sdl.Rect{sdl.Rect{0, 0, 100, 50}})
 }
 
 func LoadFont(path string) *ttf.Font {
