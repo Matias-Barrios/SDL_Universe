@@ -107,8 +107,8 @@ func main() {
 			}
 			// Elements
 			// ***********************
-			//elements.NextPieceBox(renderer, next)
-			elements.DrawText("Hozxzzzzczxczxxxxxxxxxxczxczxczla!", elements.FONTS["test"], window)
+			elements.NextPieceBox(renderer, next)
+			elements.DrawText("Hola!", elements.FONTS["test"], window)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
