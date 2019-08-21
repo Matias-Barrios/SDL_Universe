@@ -2,6 +2,7 @@ package elements
 
 import (
 	"log"
+	"os"
 
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/board"
@@ -40,23 +41,18 @@ func NextPieceBox(r *sdl.Renderer, p pieces.Piece) {
 	}
 }
 
-func DrawText(text string, font *ttf.Font, window *sdl.Window) {
-	var surface *sdl.Surface
-	var solid *sdl.Surface
+func DrawText(text string, font *ttf.Font, r *sdl.Renderer) {
 	solid, err := font.RenderUTF8Solid(text, sdl.Color{255, 0, 0, 255})
 	if err != nil {
 		log.Fatalln("Render Solid - ", err.Error())
 	}
 	defer solid.Free()
-
-	surface, err = window.GetSurface()
+	t, err := r.CreateTextureFromSurface(solid)
 	if err != nil {
-		log.Fatalln("Get surface - ", err.Error())
+		log.Fatalf("Failed to create texture: %s\n", err)
+		os.Exit(5)
 	}
-
-	if err := solid.Blit(nil, surface, nil); err != nil {
-		log.Fatalln("blit: ", err.Error())
-	}
+	r.Copy(t, nil, &sdl.Rect{0, 0, 100, 100})
 }
 
 func LoadFont(path string) *ttf.Font {

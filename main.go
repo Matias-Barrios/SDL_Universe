@@ -108,7 +108,7 @@ func main() {
 			// Elements
 			// ***********************
 			elements.NextPieceBox(renderer, next)
-			elements.DrawText("Hola!", elements.FONTS["test"], window)
+			elements.DrawText("Hola!", elements.FONTS["test"], renderer)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
@@ -135,7 +135,6 @@ func main() {
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
-			window.UpdateSurface()
 		} else {
 
 		}
