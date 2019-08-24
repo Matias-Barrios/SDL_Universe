@@ -41,8 +41,17 @@ func NextPieceBox(r *sdl.Renderer, p pieces.Piece) {
 	}
 }
 
-func DrawText(text string, font *ttf.Font, r *sdl.Renderer) {
-	solid, err := font.RenderUTF8Solid(text, sdl.Color{255, 0, 0, 255})
+func pointsBar(r *sdl.Renderer) {
+	SDL.DrawStuff(r,
+		SDL.Messages_Textures["points_bar"],
+		int(sub_ix*int(pWidth))+int(x)+int(width*0.45),
+		int(ix*int(pHeight))+int(y)+int(height*0.25),
+		int(pWidth),
+		int(pHeight))
+}
+
+func DrawText(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x int32, y int32, width int32, height int32) {
+	solid, err := font.RenderUTF8Solid(text, color)
 	if err != nil {
 		log.Fatalln("Render Solid - ", err.Error())
 	}
@@ -52,7 +61,7 @@ func DrawText(text string, font *ttf.Font, r *sdl.Renderer) {
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
-	r.Copy(t, nil, &sdl.Rect{0, 0, 100, 100})
+	r.Copy(t, nil, &sdl.Rect{x, y, width, height})
 }
 
 func LoadFont(path string) *ttf.Font {
@@ -69,5 +78,7 @@ func init() {
 		log.Fatalf("TTF init : %s\n", err.Error())
 	}
 	FONTS = make(map[string]*ttf.Font)
-	FONTS["test"] = LoadFont("fonts/test.ttf")
+	FONTS["normal"] = LoadFont("fonts/test.ttf")
+	FONTS["8bitw"] = LoadFont("fonts/8bitw.ttf")
+
 }

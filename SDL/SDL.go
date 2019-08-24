@@ -119,11 +119,12 @@ func BricksLoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Block_Textures["darkgray"] = GetTexture(w, r, "assets/darkgray.png")
 
 }
+
 func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
 	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
 	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png")
-
+	Messages_Textures["points_bar"] = GetTexture(w, r, "assets/points_bar.png")
 }
 
 func Translate(number byte) string {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -84,6 +85,7 @@ func main() {
 				case sdl.K_RIGHT:
 					thePiece.Move(1)
 				case sdl.K_DOWN:
+					fmt.Println("asdadadad")
 					thePiece.Fall(&next, &SDL.Ctx)
 				case sdl.K_a:
 					thePiece.SpinIt(-1)
@@ -108,7 +110,7 @@ func main() {
 			// Elements
 			// ***********************
 			elements.NextPieceBox(renderer, next)
-			elements.DrawText("Hola!", elements.FONTS["test"], renderer)
+			elements.DrawText("zorras!!", elements.FONTS["8bitw"], renderer, sdl.Color{234, 45, 65, 255}, 100, 100, 200, 20)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
@@ -138,10 +140,9 @@ func main() {
 		} else {
 
 		}
-		sdl.Delay(1)
+		sdl.Delay(0)
 		// renderer.Clear()
 	}
-	sdl.Delay(2000)
 	// END MAIN LOOP ....
 	// **************************************
 }
