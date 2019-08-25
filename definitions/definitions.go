@@ -10,6 +10,7 @@ const (
 )
 
 type screen struct {
+	FPS        float64
 	Width      int
 	Height     int
 	BlockSizeW int
@@ -21,11 +22,13 @@ var Screen screen
 type game struct {
 	Gravity float64
 	Running bool
+	Points  int
 }
 
 var Game = &game{
-	Gravity: 1.30,
+	Gravity: 0.60,
 	Running: true,
+	Points:  0,
 }
 
 func PointsToRatioH(h float64) int {
@@ -38,6 +41,7 @@ func PointsToRatioV(v float64) int {
 
 func init() {
 	Screen = screen{
+		FPS:        1.0 / 60.0 * 1000.0,
 		Width:      screenWidth,
 		Height:     screenHeight,
 		BlockSizeW: PointsToRatioH(25),

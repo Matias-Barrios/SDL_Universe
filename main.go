@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
@@ -69,6 +70,7 @@ func main() {
 	var next = pieces.Pieces[pieces.RandomPiece()]
 
 	for {
+		start := time.Now().UTC()
 		// Poll for SDL events
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
@@ -91,6 +93,8 @@ func main() {
 					thePiece.SpinIt(-1)
 				case sdl.K_s:
 					thePiece.SpinIt(1)
+				case sdl.K_p:
+					definitions.Game.Running = !definitions.Game.Running
 				}
 			}
 		}
@@ -110,10 +114,11 @@ func main() {
 			// Elements
 			// ***********************
 			elements.NextPieceBox(renderer, next)
-			elements.DrawText("zorras!!", elements.FONTS["8bitw"], renderer, sdl.Color{234, 45, 65, 255}, 100, 100, 200, 20)
+			elements.PointsBar(renderer)
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
+
 			// Animables
 			// ************************
 			for _, a := range SDL.Ctx.ANIMATIONS {
@@ -137,10 +142,12 @@ func main() {
 			// // Present stuff
 			// // ***********************
 			renderer.Present()
-		} else {
-
 		}
-		sdl.Delay(0)
+		elapsed := time.Since(start) / time.Second / time.Millisecond
+		if float64(elapsed) < float64(definitions.Screen.FPS) {
+			fmt.Println("Remainder : ", (definitions.Screen.FPS - float64(elapsed/time.Millisecond)), " Elapsed ", elapsed, " FPS : ", definitions.Screen.FPS)
+			sdl.Delay(1)
+		}
 		// renderer.Clear()
 	}
 	// END MAIN LOOP ....
