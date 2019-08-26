@@ -26,7 +26,7 @@ type game struct {
 }
 
 var Game = &game{
-	Gravity: 0.60,
+	Gravity: 5,
 	Running: true,
 	Points:  0,
 }

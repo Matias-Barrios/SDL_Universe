@@ -143,12 +143,11 @@ func main() {
 			// // ***********************
 			renderer.Present()
 		}
-		elapsed := time.Since(start) / time.Second / time.Millisecond
+		elapsed := time.Since(start).Seconds() * float64(time.Second/time.Millisecond)
 		if float64(elapsed) < float64(definitions.Screen.FPS) {
-			fmt.Println("Remainder : ", (definitions.Screen.FPS - float64(elapsed/time.Millisecond)), " Elapsed ", elapsed, " FPS : ", definitions.Screen.FPS)
-			sdl.Delay(1)
+			sdl.Delay(uint32(float64(definitions.Screen.FPS) - elapsed))
 		}
-		// renderer.Clear()
+		renderer.Clear()
 	}
 	// END MAIN LOOP ....
 	// **************************************

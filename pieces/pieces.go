@@ -14,7 +14,7 @@ import (
 )
 
 // How many milliseconds can you drift a piece before it fuses with the board ( depends on main loop delay which should be 1 millisecond)
-var driftlimit int = 200
+var driftlimit int = 30
 
 type Piece struct {
 	PosX     float64
