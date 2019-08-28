@@ -286,10 +286,10 @@ func Fuse(p *Piece, ctx *SDL.GameContext) {
 	}
 	cleared := board.Board.GetFilled()
 	if cleared != nil {
-		if !SDL.IsPlaying(3) {
-			fmt.Println("Is it Playing?")
-			SDL.AUDIOS["clearedLine"].Play(3, 1)
-		}
+		definitions.Game.Points = (100 * len(cleared)) * len(cleared)
+
+		fmt.Println("Is it Playing?")
+		SDL.AUDIOS["clearedLineCommon"].Play(3, 1)
 		ctx.StopMovement = true
 		ctx.ClearLines = false
 		for _, rowCleared := range cleared {
@@ -299,7 +299,7 @@ func Fuse(p *Piece, ctx *SDL.GameContext) {
 				Width:    (10 * definitions.Screen.BlockSizeW),
 				Height:   definitions.Screen.BlockSizeH,
 				Textures: SDL.BeamTextures,
-				Timings:  []int{10, 10, 10, 50},
+				Timings:  []int{6, 6, 6, 6},
 				Tick:     0,
 				Index:    0,
 				Endless:  false,

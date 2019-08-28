@@ -59,7 +59,7 @@ func PointsBar(r *sdl.Renderer) {
 		int(definitions.PointsToRatioH(70)))
 
 	DrawNumber(strconv.Itoa(definitions.Game.Points), FONTS["8bitw"], r, sdl.Color{255, 255, 255, 255},
-		int32(definitions.PointsToRatioH(480)),
+		int32(definitions.PointsToRatioH(475)),
 		int32(definitions.PointsToRatioV(370)),
 		int32(definitions.PointsToRatioH(10)),
 		int32(definitions.PointsToRatioV(45)))
@@ -90,7 +90,7 @@ func DrawNumber(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
-	r.Copy(t, nil, &sdl.Rect{x, y, int32(int(width) * len(text)), height})
+	r.Copy(t, nil, &sdl.Rect{int32(int(x) - int(width)*len(text)), y, int32(int(width) * len(text)), height})
 }
 
 func LoadFont(path string) *ttf.Font {
@@ -109,5 +109,4 @@ func init() {
 	FONTS = make(map[string]*ttf.Font)
 	FONTS["normal"] = LoadFont("fonts/test.ttf")
 	FONTS["8bitw"] = LoadFont("fonts/8bitw.ttf")
-
 }
