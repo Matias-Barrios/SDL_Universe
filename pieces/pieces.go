@@ -243,6 +243,7 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 		p.PosY += definitions.Game.Gravity
 		p.Drifting = 0
 	} else {
+		p.PosY = float64(int(p.PosY/float64(definitions.Screen.BlockSizeH)) * definitions.Screen.BlockSizeH)
 		if p.Drifting == driftlimit {
 			_, err := SDL.AUDIOS["piecedrop"].Play(-1, 0)
 			if err != nil {
@@ -285,7 +286,7 @@ func Fuse(p *Piece, ctx *SDL.GameContext) {
 	}
 	cleared := board.Board.GetFilled()
 	if cleared != nil {
-		definitions.Game.Points = (100 * len(cleared)) * len(cleared)
+		definitions.Game.Points += (100 * len(cleared)) * len(cleared)
 		SDL.AUDIOS["clearedLineCommon"].Play(-1, 1)
 		ctx.StopMovement = true
 		ctx.ClearLines = false

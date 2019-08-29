@@ -67,7 +67,7 @@ func main() {
 	//var thePiece = pieces.Pieces[pieces.RandomPiece()]
 	var thePiece = pieces.Pieces["line"]
 	var next = pieces.Pieces[pieces.RandomPiece()]
-
+	SDL.MUSIC["level1"].Play(1)
 	for {
 		start := time.Now().UTC()
 		// Poll for SDL events
@@ -77,24 +77,29 @@ func main() {
 				os.Exit(0)
 				break
 			case *sdl.KeyboardEvent:
-				if t.Type != sdl.KEYDOWN {
-					break
+				if t.Type == sdl.KEYDOWN {
+					switch key := t.Keysym.Sym; key {
+					case sdl.K_LEFT:
+						thePiece.Move(-1)
+					case sdl.K_RIGHT:
+						thePiece.Move(1)
+					case sdl.K_DOWN:
+						definitions.Game.Gravity = 12
+					// case sdl.K:
+					// 	definitions.Game.Gravity = 12
+					case sdl.K_a:
+						thePiece.SpinIt(-1)
+					case sdl.K_s:
+						thePiece.SpinIt(1)
+					case sdl.K_p:
+						definitions.Game.Running = !definitions.Game.Running
+					}
 				}
-				switch key := t.Keysym.Sym; key {
-				case sdl.K_LEFT:
-					thePiece.Move(-1)
-				case sdl.K_RIGHT:
-					thePiece.Move(1)
-				case sdl.K_DOWN:
-					definitions.Game.Gravity = 12
-				// case sdl.K:
-				// 	definitions.Game.Gravity = 12
-				case sdl.K_a:
-					thePiece.SpinIt(-1)
-				case sdl.K_s:
-					thePiece.SpinIt(1)
-				case sdl.K_p:
-					definitions.Game.Running = !definitions.Game.Running
+				if t.Type == sdl.KEYUP {
+					switch key := t.Keysym.Sym; key {
+					case sdl.K_DOWN:
+						definitions.Game.Gravity = 5
+					}
 				}
 			}
 		}
