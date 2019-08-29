@@ -1,7 +1,6 @@
 package pieces
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -287,9 +286,7 @@ func Fuse(p *Piece, ctx *SDL.GameContext) {
 	cleared := board.Board.GetFilled()
 	if cleared != nil {
 		definitions.Game.Points = (100 * len(cleared)) * len(cleared)
-
-		fmt.Println("Is it Playing?")
-		SDL.AUDIOS["clearedLineCommon"].Play(3, 1)
+		SDL.AUDIOS["clearedLineCommon"].Play(-1, 1)
 		ctx.StopMovement = true
 		ctx.ClearLines = false
 		for _, rowCleared := range cleared {

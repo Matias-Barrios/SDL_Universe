@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -87,8 +86,9 @@ func main() {
 				case sdl.K_RIGHT:
 					thePiece.Move(1)
 				case sdl.K_DOWN:
-					fmt.Println("asdadadad")
-					thePiece.Fall(&next, &SDL.Ctx)
+					definitions.Game.Gravity = 12
+				// case sdl.K:
+				// 	definitions.Game.Gravity = 12
 				case sdl.K_a:
 					thePiece.SpinIt(-1)
 				case sdl.K_s:
