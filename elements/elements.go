@@ -56,11 +56,32 @@ func PointsBar(r *sdl.Renderer) {
 		int(definitions.PointsToRatioH(330)),
 		int(definitions.PointsToRatioV(350)),
 		int(definitions.PointsToRatioH(170)),
-		int(definitions.PointsToRatioH(70)))
+		int(definitions.PointsToRatioH(45)))
 
 	DrawNumber(strconv.Itoa(definitions.Game.Points), FONTS["8bitw"], r, sdl.Color{255, 255, 255, 255},
-		int32(definitions.PointsToRatioH(475)),
-		int32(definitions.PointsToRatioV(370)),
+		int32(definitions.PointsToRatioH(495)),
+		int32(definitions.PointsToRatioV(360)),
+		int32(definitions.PointsToRatioH(10)),
+		int32(definitions.PointsToRatioV(35)))
+}
+
+func LinesBar(r *sdl.Renderer) {
+	DrawText("Lines", FONTS["8bitw"], r, sdl.Color{19, 109, 220, 255},
+		int32(definitions.PointsToRatioH(330)),
+		int32(definitions.PointsToRatioV(420)),
+		int32(definitions.PointsToRatioH(170)),
+		int32(definitions.PointsToRatioV(45)),
+	)
+	SDL.DrawStuff(r,
+		SDL.Messages_Textures["points_bar"],
+		int(definitions.PointsToRatioH(330)),
+		int(definitions.PointsToRatioV(470)),
+		int(definitions.PointsToRatioH(170)),
+		int(definitions.PointsToRatioH(70)))
+
+	DrawNumber(strconv.Itoa(definitions.Game.Lines), FONTS["8bitw"], r, sdl.Color{255, 255, 255, 255},
+		int32(definitions.PointsToRatioH(495)),
+		int32(definitions.PointsToRatioV(490)),
 		int32(definitions.PointsToRatioH(10)),
 		int32(definitions.PointsToRatioV(45)))
 }

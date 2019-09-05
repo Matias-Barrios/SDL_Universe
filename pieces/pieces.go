@@ -287,6 +287,7 @@ func Fuse(p *Piece, ctx *SDL.GameContext) {
 	cleared := board.Board.GetFilled()
 	if cleared != nil {
 		definitions.Game.Points += (100 * len(cleared)) * len(cleared)
+		definitions.Game.Lines += len(cleared)
 		SDL.AUDIOS["clearedLineCommon"].Play(-1, 1)
 		ctx.StopMovement = true
 		ctx.ClearLines = false

@@ -23,12 +23,14 @@ type game struct {
 	Gravity float64
 	Running bool
 	Points  int
+	Lines   int
 }
 
 var Game = &game{
 	Gravity: 5,
 	Running: true,
 	Points:  0,
+	Lines:   0,
 }
 
 func PointsToRatioH(h float64) int {
