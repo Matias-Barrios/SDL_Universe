@@ -14,6 +14,7 @@ type GameContext struct {
 	ANIMATIONS   []*Animable
 	StopMovement bool
 	ClearLines   bool
+	Lose         bool
 }
 
 var Ctx GameContext
@@ -122,7 +123,6 @@ func BricksLoadTextures(w *sdl.Window, r *sdl.Renderer) {
 
 func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
-	Messages_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
 	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png")
 	Messages_Textures["points_bar"] = GetTexture(w, r, "assets/points_bar.png")
 }

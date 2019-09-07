@@ -1,6 +1,7 @@
 package elements
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -84,6 +85,31 @@ func LinesBar(r *sdl.Renderer) {
 		int32(definitions.PointsToRatioV(490)),
 		int32(definitions.PointsToRatioH(10)),
 		int32(definitions.PointsToRatioV(45)))
+}
+
+func LoseAnimation(r *sdl.Renderer) {
+	defer sdl.Delay(2000)
+	DrawText("You lose", FONTS["8bitw"], r, sdl.Color{219, 30, 30, 255},
+		int32(definitions.PointsToRatioH(39)),
+		int32(definitions.PointsToRatioV(100)),
+		int32(definitions.PointsToRatioH(248)),
+		int32(definitions.PointsToRatioV(100)),
+	)
+	r.Present()
+	for {
+		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+			switch t := event.(type) {
+			case *sdl.QuitEvent:
+				os.Exit(0)
+				break
+			case *sdl.KeyboardEvent:
+				if t.Type == sdl.KEYDOWN {
+					fmt.Println("VAPAIII!")
+					return
+				}
+			}
+		}
+	}
 }
 
 func DrawText(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x int32, y int32, width int32, height int32) {

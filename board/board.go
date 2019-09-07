@@ -1,10 +1,9 @@
 package board
 
 import (
-	"math/rand"
-
 	"github.com/Matias-Barrios/SDL_Universe/SDL"
 	"github.com/Matias-Barrios/SDL_Universe/definitions"
+
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -82,21 +81,7 @@ func Lose(r *sdl.Renderer, ctx *SDL.GameContext) {
 			} else if val != 0 {
 				ctx.StopMovement = true
 				ctx.ClearLines = false
-				ctx.ANIMATIONS = append(ctx.ANIMATIONS, &SDL.Animable{
-					Posx:     definitions.PointsToRatioH(float64(Board.X + definitions.Screen.BlockSizeW)),
-					Posy:     definitions.PointsToRatioV(float64(Board.Y + (definitions.Screen.BlockSizeH * 10))),
-					Width:    definitions.PointsToRatioH(float64(definitions.Screen.BlockSizeW * 10)),
-					Height:   definitions.PointsToRatioV(float64(definitions.Screen.BlockSizeH * 10)),
-					Textures: SDL.YouLoseTextures,
-					Timings:  []int{100},
-					Tick:     0,
-					Index:    0,
-					Endless:  true,
-					Finished: false,
-					Handler: func() {
-
-					},
-				})
+				ctx.Lose = true
 			}
 		}
 	}
@@ -136,10 +121,40 @@ func checkIfFilled(line []byte) bool {
 	return true
 }
 
-func (b *board) FillBoard() {
-	for ix, row := range Board.Cells {
-		for sub_ix, _ := range row {
-			Board.Cells[ix][sub_ix] = byte(rand.Intn(5))
-		}
+func (b *board) Clean() {
+	Board = &board{
+		X: definitions.PointsToRatioH(10),
+		Y: -definitions.PointsToRatioV(float64(definitions.Screen.BlockSizeH * 5)),
+		Cells: [][]byte{
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{253, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 253},
+			{252, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 251},
+		},
 	}
 }

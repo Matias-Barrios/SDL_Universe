@@ -81,10 +81,8 @@ func main() {
 					switch key := t.Keysym.Sym; key {
 					case sdl.K_LEFT:
 						thePiece.Move(-1)
-						thePiece.Drifting = 0
 					case sdl.K_RIGHT:
 						thePiece.Move(1)
-						thePiece.Drifting = 0
 					case sdl.K_DOWN:
 						definitions.Game.Gravity = 12
 					// case sdl.K:
@@ -126,7 +124,14 @@ func main() {
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)
-
+			if SDL.Ctx.Lose {
+				elements.LoseAnimation(renderer)
+				board.Board.Clean()
+				thePiece = pieces.Pieces[pieces.RandomPiece()]
+				SDL.Ctx.Lose = false
+				SDL.Ctx.StopMovement = false
+				SDL.Ctx.ClearLines = true
+			}
 			// Animables
 			// ************************
 			for _, a := range SDL.Ctx.ANIMATIONS {
