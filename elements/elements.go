@@ -1,7 +1,6 @@
 package elements
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -88,7 +87,6 @@ func LinesBar(r *sdl.Renderer) {
 }
 
 func LoseAnimation(r *sdl.Renderer) {
-	defer sdl.Delay(2000)
 	DrawText("You lose", FONTS["8bitw"], r, sdl.Color{219, 30, 30, 255},
 		int32(definitions.PointsToRatioH(39)),
 		int32(definitions.PointsToRatioV(100)),
@@ -96,16 +94,22 @@ func LoseAnimation(r *sdl.Renderer) {
 		int32(definitions.PointsToRatioV(100)),
 	)
 	r.Present()
+	readKey()
+	sdl.Delay(1000)
+}
+
+func readKey() {
 	for {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
-			case *sdl.QuitEvent:
-				os.Exit(0)
-				break
 			case *sdl.KeyboardEvent:
 				if t.Type == sdl.KEYDOWN {
-					fmt.Println("VAPAIII!")
-					return
+					switch key := t.Keysym.Sym; key {
+					default:
+						for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+						}
+						return
+					}
 				}
 			}
 		}
