@@ -15,6 +15,7 @@ type GameContext struct {
 	StopMovement bool
 	ClearLines   bool
 	Lose         bool
+	Level        int
 }
 
 var Ctx GameContext

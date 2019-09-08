@@ -24,6 +24,7 @@ type game struct {
 	Running bool
 	Points  int
 	Lines   int
+	Goal    int
 }
 
 var Game = &game{
@@ -31,6 +32,7 @@ var Game = &game{
 	Running: true,
 	Points:  0,
 	Lines:   0,
+	Goal:    20,
 }
 
 func PointsToRatioH(h float64) int {

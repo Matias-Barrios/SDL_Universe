@@ -21,7 +21,6 @@ func main() {
 	SDL.Ctx.ANIMATIONS = make([]*SDL.Animable, 0, 100)
 	SDL.Ctx.StopMovement = false
 	SDL.Ctx.ClearLines = true
-
 	window, renderer, err := SDL.InitSDL()
 	if err != nil {
 		log.Fatalf("%s\n", err.Error())
@@ -40,11 +39,11 @@ func main() {
 	defer window.Destroy()
 	defer renderer.Destroy()
 	defer mix.CloseAudio()
-	t := SDL.GetTexture(window, renderer, "backgrounds/sky.png")
 
 	SDL.LoadTextures(window, renderer)
 	SDL.LoadAnimations(window, renderer)
 	SDL.BricksLoadTextures(window, renderer)
+	SDL.LoadBackgrounds(window, renderer)
 
 	// SDL.Ctx.ANIMATIONS = append(SDL.Ctx.ANIMATIONS, &SDL.Animable{
 	// 	Posx:     0,
@@ -106,7 +105,7 @@ func main() {
 		if definitions.Game.Running {
 
 			// Background
-			SDL.DrawStuff(renderer, t, 0, 0, int(definitions.Screen.Width), int(definitions.Screen.Height))
+			SDL.DrawStuff(renderer, SDL.Backgrounds[SDL.Ctx.Level].Image, 0, 0, int(definitions.Screen.Width), int(definitions.Screen.Height))
 
 			// Happenings
 			// ***********************
