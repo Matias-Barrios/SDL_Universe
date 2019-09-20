@@ -106,8 +106,6 @@ func readKey() {
 				if t.Type == sdl.KEYDOWN {
 					switch key := t.Keysym.Sym; key {
 					default:
-						for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-						}
 						return
 					}
 				}
