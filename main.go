@@ -105,8 +105,7 @@ func main() {
 		if definitions.Game.Running {
 
 			// Background
-			SDL.DrawStuff(renderer, SDL.Backgrounds[SDL.Ctx.Level].Image, 0, 0, int(definitions.Screen.Width), int(definitions.Screen.Height))
-
+			SDL.DrawStuff(renderer, SDL.Backgrounds[SDL.Ctx.Level].Image, 0, 0, 1000, 1000)
 			// Happenings
 			// ***********************
 
@@ -120,6 +119,8 @@ func main() {
 			elements.NextPieceBox(renderer, next)
 			elements.PointsBar(renderer)
 			elements.LinesBar(renderer)
+			elements.LevelBar(renderer)
+
 			board.Draw(renderer)
 			thePiece.Draw(renderer)
 			board.Lose(renderer, &SDL.Ctx)

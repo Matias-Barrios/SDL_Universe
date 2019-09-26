@@ -15,39 +15,39 @@ var Backgrounds map[int]Background
 func LoadBackgrounds(w *sdl.Window, r *sdl.Renderer) {
 	Backgrounds = make(map[int]Background)
 	Backgrounds[0] = Background{
-		Image: GetTexture(w, r, "backgrounds/sky.png"),
+		Image: GetTexture(w, r, "backgrounds/sky.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[1] = Background{
-		Image: GetTexture(w, r, "backgrounds/City1.png"),
+		Image: GetTexture(w, r, "backgrounds/City1.png", 200),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[2] = Background{
-		Image: GetTexture(w, r, "backgrounds/Battleground1.png"),
+		Image: GetTexture(w, r, "backgrounds/Battleground1.png", 200),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[3] = Background{
-		Image: GetTexture(w, r, "backgrounds/City2.png"),
+		Image: GetTexture(w, r, "backgrounds/City2.png", 200),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[4] = Background{
-		Image: GetTexture(w, r, "backgrounds/Battleground2.png"),
+		Image: GetTexture(w, r, "backgrounds/Battleground2.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[5] = Background{
-		Image: GetTexture(w, r, "backgrounds/City3.png"),
+		Image: GetTexture(w, r, "backgrounds/City3.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[6] = Background{
-		Image: GetTexture(w, r, "backgrounds/Battleground3.png"),
+		Image: GetTexture(w, r, "backgrounds/Battleground3.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[7] = Background{
-		Image: GetTexture(w, r, "backgrounds/City4.png"),
+		Image: GetTexture(w, r, "backgrounds/City4.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 	Backgrounds[8] = Background{
-		Image: GetTexture(w, r, "backgrounds/Battleground4.png"),
+		Image: GetTexture(w, r, "backgrounds/Battleground4.png", 255),
 		Music: LoadMusic("sound/music/happy.mp3"),
 	}
 }

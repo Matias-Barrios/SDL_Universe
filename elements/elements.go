@@ -16,27 +16,20 @@ var FONTS map[string]*ttf.Font
 
 func NextPieceBox(r *sdl.Renderer, p pieces.Piece) {
 	DrawText("Next piece", FONTS["8bitw"], r, sdl.Color{19, 109, 220, 255},
-		int32(definitions.PointsToRatioH(330)),
-		int32(definitions.PointsToRatioV(100)),
-		int32(definitions.PointsToRatioH(150)),
-		int32(definitions.PointsToRatioV(45)),
+		550,
+		10,
+		200,
+		80,
 	)
-	SDL.DrawStuff(r,
-		SDL.Messages_Textures["points_bar"],
-		int(definitions.PointsToRatioH(330)),
-		int(definitions.PointsToRatioV(150)),
-		int(definitions.PointsToRatioH(150)),
-		int(definitions.PointsToRatioV(140)))
-
-	var pWidth = float64(definitions.Screen.BlockSizeW) * 0.50
-	var pHeight = float64(definitions.Screen.BlockSizeH) * 0.50
+	var pWidth = float64(definitions.Screen.BlockSizeW) * 0.70
+	var pHeight = float64(definitions.Screen.BlockSizeH) * 0.70
 	for ix, row := range p.Shape[p.Spin] {
 		for sub_ix, val := range row {
 			if val != 0 {
 				SDL.DrawStuff(r,
 					SDL.Block_Textures[SDL.Translate(val)],
-					int(sub_ix*int(pWidth))+definitions.PointsToRatioH(340),
-					int(ix*int(pHeight))+definitions.PointsToRatioV(190),
+					int(sub_ix*int(pWidth))+540,
+					int(ix*int(pHeight))+90,
 					int(pWidth),
 					int(pHeight))
 			}
@@ -45,53 +38,81 @@ func NextPieceBox(r *sdl.Renderer, p pieces.Piece) {
 }
 
 func PointsBar(r *sdl.Renderer) {
+	var x int32 = 550
+	var y int32 = 310
+	var width int32 = 210
+	var height int32 = 80
 	DrawText("Points", FONTS["8bitw"], r, sdl.Color{19, 109, 220, 255},
-		int32(definitions.PointsToRatioH(330)),
-		int32(definitions.PointsToRatioV(300)),
-		int32(definitions.PointsToRatioH(170)),
-		int32(definitions.PointsToRatioV(45)),
+		(x),
+		(y),
+		(width),
+		(height),
 	)
 	SDL.DrawStuff(r,
 		SDL.Messages_Textures["points_bar"],
-		int(definitions.PointsToRatioH(330)),
-		int(definitions.PointsToRatioV(350)),
-		int(definitions.PointsToRatioH(170)),
-		int(definitions.PointsToRatioH(45)))
+		int(x),
+		int(y+height+20),
+		int(width*2),
+		int(float64(height)*1.10))
 
 	DrawNumber(strconv.Itoa(definitions.Game.Points), FONTS["8bitw"], r, sdl.Color{255, 255, 255, 255},
-		int32(definitions.PointsToRatioH(495)),
-		int32(definitions.PointsToRatioV(360)),
-		int32(definitions.PointsToRatioH(10)),
-		int32(definitions.PointsToRatioV(35)))
+		(x + (width * 2) - 5),
+		(y + height + 29),
+		(15),
+		int32(float64(height)*0.80))
 }
 
 func LinesBar(r *sdl.Renderer) {
+	var x int32 = 550
+	var y int32 = 510
+	var width int32 = 210
+	var height int32 = 80
+
 	DrawText("Lines", FONTS["8bitw"], r, sdl.Color{19, 109, 220, 255},
-		int32(definitions.PointsToRatioH(330)),
-		int32(definitions.PointsToRatioV(420)),
-		int32(definitions.PointsToRatioH(170)),
-		int32(definitions.PointsToRatioV(45)),
+		(x),
+		(y),
+		(width),
+		(height),
 	)
 	SDL.DrawStuff(r,
 		SDL.Messages_Textures["points_bar"],
-		int(definitions.PointsToRatioH(330)),
-		int(definitions.PointsToRatioV(470)),
-		int(definitions.PointsToRatioH(170)),
-		int(definitions.PointsToRatioH(70)))
+		int(x),
+		int(y+height+20),
+		int(width*2),
+		int(float64(height)*1.10))
 
 	DrawNumber(strconv.Itoa(definitions.Game.Lines), FONTS["8bitw"], r, sdl.Color{255, 255, 255, 255},
-		int32(definitions.PointsToRatioH(495)),
-		int32(definitions.PointsToRatioV(490)),
-		int32(definitions.PointsToRatioH(10)),
-		int32(definitions.PointsToRatioV(45)))
+		(x + (width * 2) - 5),
+		(y + height + 29),
+		(15),
+		int32(float64(height)*0.80))
+}
+
+func LevelBar(r *sdl.Renderer) {
+	var x int32 = 550
+	var y int32 = 810
+	var width int32 = 210
+	var height int32 = 80
+
+	DrawText("Level", FONTS["8bitw"], r, sdl.Color{252, 107, 3, 255},
+		(x),
+		(y),
+		(width),
+		(height),
+	)
+	DrawNumber(strconv.Itoa(definitions.Game.Level), FONTS["8bitw"], r, sdl.Color{150, 200, 50, 255},
+		(x + (width * 2) - 50),
+		(y),
+		(30),
+		height)
 }
 
 func LoseAnimation(r *sdl.Renderer) {
 	DrawText("You lose", FONTS["8bitw"], r, sdl.Color{219, 30, 30, 255},
-		int32(definitions.PointsToRatioH(39)),
-		int32(definitions.PointsToRatioV(100)),
-		int32(definitions.PointsToRatioH(248)),
-		int32(definitions.PointsToRatioV(100)),
+		(70),
+		(300),
+		(370),
+		(100),
 	)
 	r.Present()
 	readKey()
@@ -102,6 +123,9 @@ func readKey() {
 	for {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
+			case *sdl.QuitEvent:
+				os.Exit(0)
+				break
 			case *sdl.KeyboardEvent:
 				if t.Type == sdl.KEYDOWN {
 					switch key := t.Keysym.Sym; key {
@@ -125,7 +149,10 @@ func DrawText(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x i
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
-	r.Copy(t, nil, &sdl.Rect{x, y, width, height})
+	r.Copy(t, nil, &sdl.Rect{int32(definitions.PointsToRatioH(float64(x))),
+		int32(definitions.PointsToRatioV(float64(y))),
+		int32(definitions.PointsToRatioH(float64(width))),
+		int32(definitions.PointsToRatioV(float64(height)))})
 }
 
 func DrawNumber(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x int32, y int32, width int32, height int32) {
@@ -139,7 +166,10 @@ func DrawNumber(text string, font *ttf.Font, r *sdl.Renderer, color sdl.Color, x
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
-	r.Copy(t, nil, &sdl.Rect{int32(int(x) - int(width)*len(text)), y, int32(int(width) * len(text)), height})
+	r.Copy(t, nil, &sdl.Rect{int32(definitions.PointsToRatioH(float64(int(x) - (len(text) * int(width))))),
+		int32(definitions.PointsToRatioV(float64(y))),
+		int32(definitions.PointsToRatioH(float64((len(text) * int(width))))),
+		int32(definitions.PointsToRatioV(float64(height)))})
 }
 
 func LoadFont(path string) *ttf.Font {

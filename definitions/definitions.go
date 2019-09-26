@@ -25,6 +25,7 @@ type game struct {
 	Points  int
 	Lines   int
 	Goal    int
+	Level   int
 }
 
 var Game = &game{
@@ -33,6 +34,7 @@ var Game = &game{
 	Points:  0,
 	Lines:   0,
 	Goal:    20,
+	Level:   1,
 }
 
 func PointsToRatioH(h float64) int {
@@ -48,7 +50,7 @@ func init() {
 		FPS:        1.0 / 60.0 * 1000.0,
 		Width:      screenWidth,
 		Height:     screenHeight,
-		BlockSizeW: PointsToRatioH(25),
-		BlockSizeH: PointsToRatioV(25),
+		BlockSizeW: 40,
+		BlockSizeH: 40,
 	}
 }

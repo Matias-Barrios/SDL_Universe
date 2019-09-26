@@ -19,20 +19,12 @@ type GameContext struct {
 }
 
 var Ctx GameContext
+var Background_Overlay *sdl.Texture
 
 func InitSDL() (*sdl.Window, *sdl.Renderer, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return &sdl.Window{}, &sdl.Renderer{}, err
 	}
-
-	mode, err := sdl.GetDesktopDisplayMode(0)
-	if err != nil {
-		return nil, nil, err
-	}
-	definitions.Screen.Width = int(float64(mode.W) / 2.3)
-	definitions.Screen.Height = int(float64(mode.H) / 1.3)
-	//definitions.Screen.Width = int(1024 / 2.3)
-	//definitions.Screen.Height = int(800 / 1.3)
 
 	window, err := sdl.CreateWindow("Universe", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
 		int32(definitions.Screen.Width), int32(definitions.Screen.Height), sdl.WINDOW_SHOWN)
@@ -47,7 +39,7 @@ func InitSDL() (*sdl.Window, *sdl.Renderer, error) {
 }
 
 // Get a texture from a window, a renderer and a path
-func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
+func GetTexture(w *sdl.Window, r *sdl.Renderer, path string, alpha uint8) *sdl.Texture {
 	surface, err := w.GetSurface()
 	if err != nil {
 		panic(err)
@@ -59,18 +51,25 @@ func GetTexture(w *sdl.Window, r *sdl.Renderer, path string) *sdl.Texture {
 		log.Fatalf("Failed to load PNG: %s\n", err)
 		os.Exit(4)
 	}
+	surfaceImg.SetAlphaMod(alpha)
 	textureImg, err := r.CreateTextureFromSurface(surfaceImg)
 	if err != nil {
 		log.Fatalf("Failed to create texture: %s\n", err)
 		os.Exit(5)
 	}
 	surfaceImg.Free()
+	textureImg.SetBlendMode(sdl.BLENDMODE_BLEND)
 	return textureImg
 }
 
 // DrawStuff : Draw shit
 func DrawStuff(r *sdl.Renderer, t *sdl.Texture, posx int, posy int, width int, height int) {
-	r.Copy(t, nil, &sdl.Rect{int32(posx), int32(posy), int32(width), int32(height)})
+	r.Copy(t,
+		nil,
+		&sdl.Rect{int32(int32(definitions.PointsToRatioH(float64(posx)))),
+			int32(definitions.PointsToRatioV(float64(posy))),
+			int32(definitions.PointsToRatioH(float64(width))),
+			int32(definitions.PointsToRatioV(float64(height)))})
 }
 
 var Block_Textures map[string]*sdl.Texture
@@ -80,52 +79,53 @@ var Messages_Textures map[string]*sdl.Texture
 // Thanks dude!
 func BricksLoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Block_Textures = make(map[string]*sdl.Texture)
-	Block_Textures["BlueBlockFractured"] = GetTexture(w, r, "assets/BlueBlockFractured.png")
-	Block_Textures["BlueBlockFX"] = GetTexture(w, r, "assets/BlueBlockFX.png")
-	Block_Textures["BlueBlockShatteringFX"] = GetTexture(w, r, "assets/BlueBlockShatteringFX.png")
-	Block_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png")
-	Block_Textures["GrayBlockFractured"] = GetTexture(w, r, "assets/GrayBlockFractured.png")
-	Block_Textures["GrayBlockFX"] = GetTexture(w, r, "assets/GrayBlockFX.png")
-	Block_Textures["GrayBlockShatteringFX"] = GetTexture(w, r, "assets/GrayBlockShatteringFX.png")
-	Block_Textures["GreenBlockFractured"] = GetTexture(w, r, "assets/GreenBlockFractured.png")
-	Block_Textures["GreenBlockFX"] = GetTexture(w, r, "assets/GreenBlockFX.png")
-	Block_Textures["GreenBlockShatteringFX"] = GetTexture(w, r, "assets/GreenBlockShatteringFX.png")
-	Block_Textures["IcyBlueBlockFractured"] = GetTexture(w, r, "assets/IcyBlueBlockFractured.png")
-	Block_Textures["IcyBlueBlockFX"] = GetTexture(w, r, "assets/IcyBlueBlockFX.png")
-	Block_Textures["IcyBlueBlockShatteringFX"] = GetTexture(w, r, "assets/IcyBlueBlockShatteringFX.png")
-	Block_Textures["InfectBlockFX"] = GetTexture(w, r, "assets/InfectBlockFX.png")
-	Block_Textures["OrangeBlockFractured"] = GetTexture(w, r, "assets/OrangeBlockFractured.png")
-	Block_Textures["OrangeBlockFX"] = GetTexture(w, r, "assets/OrangeBlockFX.png")
-	Block_Textures["OrangeBlockShatteringFX"] = GetTexture(w, r, "assets/OrangeBlockShatteringFX.png")
-	Block_Textures["PinkBlockFractured"] = GetTexture(w, r, "assets/PinkBlockFractured.png")
-	Block_Textures["PinkBlockFX"] = GetTexture(w, r, "assets/PinkBlockFX.png")
-	Block_Textures["PinkBlockShatteringFX"] = GetTexture(w, r, "assets/PinkBlockShatteringFX.png")
-	Block_Textures["PlayerBlock"] = GetTexture(w, r, "assets/PlayerBlock.png")
-	Block_Textures["PurpleBlockFractured"] = GetTexture(w, r, "assets/PurpleBlockFractured.png")
-	Block_Textures["PurpleBlockFX"] = GetTexture(w, r, "assets/PurpleBlockFX.png")
-	Block_Textures["PurpleBlockShatteringFX"] = GetTexture(w, r, "assets/PurpleBlockShatteringFX.png")
-	Block_Textures["RainbowBlockFX"] = GetTexture(w, r, "assets/RainbowBlockFX.png")
-	Block_Textures["RedBlockCracked"] = GetTexture(w, r, "assets/RedBlockCracked.png")
-	Block_Textures["RedBlockFractured"] = GetTexture(w, r, "assets/RedBlockFractured.png")
-	Block_Textures["RedBlockFX"] = GetTexture(w, r, "assets/RedBlockFX.png")
-	Block_Textures["RestoreBlockFX"] = GetTexture(w, r, "assets/RestoreBlockFX.png")
-	Block_Textures["SpecialBlockFX"] = GetTexture(w, r, "assets/SpecialBlockFX.png")
-	Block_Textures["YellowBlockFractured"] = GetTexture(w, r, "assets/YellowBlockFractured.png")
-	Block_Textures["YellowBlockFX"] = GetTexture(w, r, "assets/YellowBlockFX.png")
-	Block_Textures["pipe_corner_bottom_left"] = GetTexture(w, r, "assets/pipe_corner_bottom_left.png")
-	Block_Textures["pipe_corner_bottom_right"] = GetTexture(w, r, "assets/pipe_corner_bottom_right.png")
-	Block_Textures["pipe_corner_top_left"] = GetTexture(w, r, "assets/pipe_corner_top_left.png")
-	Block_Textures["pipe_corner_top_right"] = GetTexture(w, r, "assets/pipe_corner_top_right.png")
-	Block_Textures["pipe_horizontal"] = GetTexture(w, r, "assets/pipe_horizontal.png")
-	Block_Textures["pipe_vertical"] = GetTexture(w, r, "assets/pipe_vertical.png")
-	Block_Textures["darkgray"] = GetTexture(w, r, "assets/darkgray.png")
+	Background_Overlay = GetTexture(w, r, "backgrounds/background_overlay.png", 0)
+	Block_Textures["BlueBlockFractured"] = GetTexture(w, r, "assets/BlueBlockFractured.png", 255)
+	Block_Textures["BlueBlockFX"] = GetTexture(w, r, "assets/BlueBlockFX.png", 255)
+	Block_Textures["BlueBlockShatteringFX"] = GetTexture(w, r, "assets/BlueBlockShatteringFX.png", 255)
+	Block_Textures["gameover"] = GetTexture(w, r, "assets/gameover.png", 255)
+	Block_Textures["GrayBlockFractured"] = GetTexture(w, r, "assets/GrayBlockFractured.png", 255)
+	Block_Textures["GrayBlockFX"] = GetTexture(w, r, "assets/GrayBlockFX.png", 255)
+	Block_Textures["GrayBlockShatteringFX"] = GetTexture(w, r, "assets/GrayBlockShatteringFX.png", 255)
+	Block_Textures["GreenBlockFractured"] = GetTexture(w, r, "assets/GreenBlockFractured.png", 255)
+	Block_Textures["GreenBlockFX"] = GetTexture(w, r, "assets/GreenBlockFX.png", 255)
+	Block_Textures["GreenBlockShatteringFX"] = GetTexture(w, r, "assets/GreenBlockShatteringFX.png", 255)
+	Block_Textures["IcyBlueBlockFractured"] = GetTexture(w, r, "assets/IcyBlueBlockFractured.png", 255)
+	Block_Textures["IcyBlueBlockFX"] = GetTexture(w, r, "assets/IcyBlueBlockFX.png", 255)
+	Block_Textures["IcyBlueBlockShatteringFX"] = GetTexture(w, r, "assets/IcyBlueBlockShatteringFX.png", 255)
+	Block_Textures["InfectBlockFX"] = GetTexture(w, r, "assets/InfectBlockFX.png", 255)
+	Block_Textures["OrangeBlockFractured"] = GetTexture(w, r, "assets/OrangeBlockFractured.png", 255)
+	Block_Textures["OrangeBlockFX"] = GetTexture(w, r, "assets/OrangeBlockFX.png", 255)
+	Block_Textures["OrangeBlockShatteringFX"] = GetTexture(w, r, "assets/OrangeBlockShatteringFX.png", 255)
+	Block_Textures["PinkBlockFractured"] = GetTexture(w, r, "assets/PinkBlockFractured.png", 255)
+	Block_Textures["PinkBlockFX"] = GetTexture(w, r, "assets/PinkBlockFX.png", 255)
+	Block_Textures["PinkBlockShatteringFX"] = GetTexture(w, r, "assets/PinkBlockShatteringFX.png", 255)
+	Block_Textures["PlayerBlock"] = GetTexture(w, r, "assets/PlayerBlock.png", 255)
+	Block_Textures["PurpleBlockFractured"] = GetTexture(w, r, "assets/PurpleBlockFractured.png", 255)
+	Block_Textures["PurpleBlockFX"] = GetTexture(w, r, "assets/PurpleBlockFX.png", 255)
+	Block_Textures["PurpleBlockShatteringFX"] = GetTexture(w, r, "assets/PurpleBlockShatteringFX.png", 255)
+	Block_Textures["RainbowBlockFX"] = GetTexture(w, r, "assets/RainbowBlockFX.png", 255)
+	Block_Textures["RedBlockCracked"] = GetTexture(w, r, "assets/RedBlockCracked.png", 255)
+	Block_Textures["RedBlockFractured"] = GetTexture(w, r, "assets/RedBlockFractured.png", 255)
+	Block_Textures["RedBlockFX"] = GetTexture(w, r, "assets/RedBlockFX.png", 255)
+	Block_Textures["RestoreBlockFX"] = GetTexture(w, r, "assets/RestoreBlockFX.png", 255)
+	Block_Textures["SpecialBlockFX"] = GetTexture(w, r, "assets/SpecialBlockFX.png", 255)
+	Block_Textures["YellowBlockFractured"] = GetTexture(w, r, "assets/YellowBlockFractured.png", 255)
+	Block_Textures["YellowBlockFX"] = GetTexture(w, r, "assets/YellowBlockFX.png", 255)
+	Block_Textures["pipe_corner_bottom_left"] = GetTexture(w, r, "assets/pipe_corner_bottom_left.png", 255)
+	Block_Textures["pipe_corner_bottom_right"] = GetTexture(w, r, "assets/pipe_corner_bottom_right.png", 255)
+	Block_Textures["pipe_corner_top_left"] = GetTexture(w, r, "assets/pipe_corner_top_left.png", 255)
+	Block_Textures["pipe_corner_top_right"] = GetTexture(w, r, "assets/pipe_corner_top_right.png", 255)
+	Block_Textures["pipe_horizontal"] = GetTexture(w, r, "assets/pipe_horizontal.png", 255)
+	Block_Textures["pipe_vertical"] = GetTexture(w, r, "assets/pipe_vertical.png", 255)
+	Block_Textures["darkgray"] = GetTexture(w, r, "assets/darkgray.png", 255)
 
 }
 
 func LoadTextures(w *sdl.Window, r *sdl.Renderer) {
 	Messages_Textures = make(map[string]*sdl.Texture)
-	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png")
-	Messages_Textures["points_bar"] = GetTexture(w, r, "assets/points_bar.png")
+	Messages_Textures["frame"] = GetTexture(w, r, "assets/frame.png", 255)
+	Messages_Textures["points_bar"] = GetTexture(w, r, "assets/points_bar.png", 255)
 }
 
 func Translate(number byte) string {
