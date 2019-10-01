@@ -1,7 +1,6 @@
 package pieces
 
 import (
-	"log"
 	"math"
 	"math/rand"
 	"time"
@@ -389,10 +388,10 @@ func (p *Piece) Fall(next *Piece, c *SDL.GameContext) {
 	} else {
 		p.PosY = float64(int(p.PosY/float64(definitions.Screen.BlockSizeH)) * definitions.Screen.BlockSizeH)
 		if p.Drifting == driftlimit {
-			_, err := SDL.AUDIOS["piecedrop"].Play(-1, 0)
-			if err != nil {
-				log.Fatalln(err.Error())
-			}
+			// _, err := SDL.AUDIOS["piecedrop"].Play(-1, 0)
+			// if err != nil {
+			// 	log.Fatalln(err.Error())
+			// }
 			Fuse(p, c)
 			*p = *next
 			*next = Pieces[RandomPiece()]

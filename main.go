@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/Matias-Barrios/SDL_Universe/board"
@@ -17,6 +18,7 @@ import (
 )
 
 func main() {
+	runtime.LockOSThread()
 	// Setting Game context
 	SDL.Ctx.ANIMATIONS = make([]*SDL.Animable, 0, 100)
 	SDL.Ctx.StopMovement = false
